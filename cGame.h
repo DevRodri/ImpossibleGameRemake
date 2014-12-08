@@ -6,6 +6,7 @@
 #include "cInputLayer.h"
 #include "cScene.h"
 #include "cPlayer.h"
+#include "cFisicas.h"
 //#include "cPhysics.h"
 
 #define STATE_MAIN	0
@@ -32,7 +33,7 @@ public:
 	cInputLayer Input;
 	cScene Scene;
 	cPlayer Player;
-	//cPhysics Physics;
+	cFisicas Physics;
 
 	int state;
 };

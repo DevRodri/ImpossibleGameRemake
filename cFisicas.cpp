@@ -1,18 +1,29 @@
 #include "cFisicas.h"
 
 
-cFisicas::cFisicas(cGame *game_parameter){Game=game_parameter; }
-cFisicas::~cFisicas(){ Game = NULL; }
+cFisicas::cFisicas(){}
+cFisicas::~cFisicas(){}
 
-void cFisicas::apply_gravity(float dt)
+void cFisicas::SetGravity(float gravity)
 {
-	float velocity;
-	Game->Player.GetVely(&velocity);
-	velocity = velocity + Gravity * dt;
-	Game->Player.SetVely(velocity);
+	Gravity = gravity;
 }
 
-bool cFisicas::tile_colision(cScene *Scene,int posx,int posy)
+void cFisicas::GetGravity(float *gravity)
+{
+	*gravity = Gravity;
+}
+
+bool cFisicas::ApplyGravity(cPlayer *Player,float dt)
+{
+	float velocity;
+	Player->GetVely(&velocity);
+	velocity = velocity + Gravity * dt;
+	Player->SetVely(velocity);
+	return true;
+}
+
+bool cFisicas::TileColision(cScene *Scene,int posx,int posy)
 {
 	int objeto;
 	objeto = Scene->map[posx][posy];
@@ -36,13 +47,13 @@ bool cFisicas::tile_colision(cScene *Scene,int posx,int posy)
 	else  { return false; }
 }
 
-bool cFisicas::is_incollision()
+bool cFisicas::Is_Incollision(cPlayer *Player,cScene *Scene)
 {
 	int posx, posy,tsize;
 	//obtener las coordenadas del jugador en el mundo
 
-	Game->Player.GetGlobalPosition(&posx, &posy);
-	Game->Player.GetTileSize(&tsize);
+	Player->GetGlobalPosition(&posx, &posy);
+	Player->GetTileSize(&tsize);
 
 	//calculamos los 4 puntos de la caja del player.
 	//  x,y------x1,y1
@@ -79,41 +90,41 @@ bool cFisicas::is_incollision()
 		divresult = div(y, tsize);
 		ty = divresult.quot;
 
-		b = tile_colision(&Game->Scene, tx, ty);
+		b = TileColision(Scene, tx, ty);
 
 		divresult = div(x1, tsize);
 		tx1 = divresult.quot;
 		divresult = div(y1, tsize);
 		ty1 = divresult.quot;
 
-		b1 = tile_colision(&Game->Scene, tx1, ty1);
+		b1 = TileColision(Scene, tx1, ty1);
 
 		divresult = div(x2, tsize);
 		tx2 = divresult.quot;
 		divresult = div(y2, tsize);
 		ty2 = divresult.quot;
 
-		b2 = tile_colision(&Game->Scene, tx1, ty1);
+		b2 = TileColision(Scene, tx1, ty1);
 
 		divresult = div(x3, tsize);
 		tx3 = divresult.quot;
 		divresult = div(y3, tsize);
 		ty3 = divresult.quot;
 
-		b3 = tile_colision(&Game->Scene, tx1, ty1);
+		b3 = TileColision(Scene, tx1, ty1);
 
-		return b&&b1&&b2&&b3;
+		return b||b1||b2||b3;
 
 	}
 }
 
 
-bool cFisicas::is_grounded()
+bool cFisicas::Is_Grounded(cPlayer *Player, cScene *Scene)
 {
 	int posx, posy,tsize;
 	
-	Game->Player.GetGlobalPosition(&posx, &posy);
-	Game->Player.GetTileSize(&tsize);
+	Player->GetGlobalPosition(&posx, &posy);
+	Player->GetTileSize(&tsize);
 	//un objeto toca suelo cuando el objeto que tiene justo debajo es del tipo cubo o es el suelo.
 	
 	if (posy == 0){ return true; } //esta en el suelo;
@@ -132,7 +143,7 @@ bool cFisicas::is_grounded()
 		if (posx % 32 == 0) //estamos justo en una sola tile, tenemos que mriar solo debajo nuestro
 		{
 			int objeto;
-			objeto = Game->Scene.map[tx][ty + 1];
+			objeto = Scene->map[tx][ty + 1];
 			if (objeto==1 || objeto==4)//suelo o cubo
 			{
 				return true;
@@ -142,9 +153,9 @@ bool cFisicas::is_grounded()
 		else //estamos en medio de 2 hay que mirar las 2 y es la suma de las 2.
 		{
 			int objeto;
-			objeto = Game->Scene.map[tx][tx + 1];
+			objeto = Scene->map[tx][tx + 1];
 			int objeto1;
-			objeto1 = Game->Scene.map[tx+1][ty + 1];
+			objeto1 = Scene->map[tx+1][ty + 1];
 
 			if ((objeto == 1 || objeto == 4) || (objeto1 == 1 || objeto1 == 4))//suelo o cubo
 			{

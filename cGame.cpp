@@ -33,11 +33,12 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	Scene.LoadMap("map.txt");
 
 	//Inicializa Gravedad
-	//Physics.SetGravity(9.81);
+	Physics.SetGravity(0.01f);
 
 	//Inicializa posicion del jugador
 	Player.SetLocalPosition(0,0);
 	Player.SetGlobalPosition(&Player, &Scene);
+
 
 	return true;
 }
@@ -81,10 +82,10 @@ bool cGame::ManageInputs()
 
 bool cGame::ManagePhysics()
 {
-	bool res = true; //cuando se añada la clase de fisicas el "= true" va fuera.
+	bool res; //cuando se añada la clase de fisicas el "= true" va fuera.
 
 	//aqui se aplica la gravedad a cada iteración y todo lo relacionado con fisicas.
-	//res = Physics.ApplyGravity();
+	res = Physics.ApplyGravity(&Player,0.0f); //aqui hay que poner el deltatime.
 
 	return res;
 }
