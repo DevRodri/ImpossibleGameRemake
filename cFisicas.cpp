@@ -23,8 +23,8 @@ bool cFisicas::ApplyGravity(cPlayer *Player,float dt)
 	velocity = velocity + Gravity * dt;
 	Player->SetVely(velocity);
 
-	Player->GetGlobalPosition(&x, &y);
-	//Player->SetGlobalPosition(x, y + velocity);
+	//Player->GetGlobalPosition(&x, &y);
+	//Player->SetGlobalPosition(x, y + velocity*dt);
 	
 	return true;
 }
