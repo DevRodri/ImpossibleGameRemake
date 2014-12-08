@@ -16,8 +16,9 @@ public:
 	float Gravity=0.01f;
 	//funcion que aplica gravedad a la escena
 	void apply_gravity(float dt);
-	//funcion que detecta si el  un punto x y esta en colisión con algun objeto.
+	//funcion que detecta si el  Player esta en colisión con algun objeto.
 	bool is_incollision();
+	//funcion que te dice si el player esta tocando suelo o pieza solida.
 	bool is_grounded();
 
 private:
