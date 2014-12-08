@@ -38,7 +38,7 @@ bool cFisicas::tile_colision(cScene *Scene,int posx,int posy)
 
 bool cFisicas::is_incollision()
 {
-	int posx, posy, posfx, posfy,tsize;
+	int posx, posy,tsize;
 	//obtener las coordenadas del jugador en el mundo
 
 	Game->Player.GetGlobalPosition(&posx, &posy);
@@ -108,10 +108,11 @@ bool cFisicas::is_incollision()
 }
 
 
-bool cFisicas::is_grounded(int posx, int posy)
+bool cFisicas::is_grounded()
 {
-	int tsize;
-
+	int posx, posy,tsize;
+	
+	Game->Player.GetGlobalPosition(&posx, &posy);
 	Game->Player.GetTileSize(&tsize);
 	//un objeto toca suelo cuando el objeto que tiene justo debajo es del tipo cubo o es el suelo.
 	
@@ -120,7 +121,7 @@ bool cFisicas::is_grounded(int posx, int posy)
 	if (posy % 32 == 0) //puede ser que este encima de un cubo, pero no se sabe.
 	{
 		//buscamos los 2 cubos que pueden estar justo debajo.
-		int tx, ty, tx1, ty1;
+		int tx, ty;
 
 		div_t divresult;
 		divresult = div(posx, tsize);

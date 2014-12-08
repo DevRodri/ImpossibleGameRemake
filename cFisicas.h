@@ -18,10 +18,11 @@ public:
 	void apply_gravity(float dt);
 	//funcion que detecta si el  un punto x y esta en colisión con algun objeto.
 	bool is_incollision();
+	bool is_grounded();
 
 private:
 	//funcion que nos dice si el player esta grounded
-	bool is_grounded(int posx, int posy);
+	
 	bool tile_colision(cScene *Scene, int posx, int posy);
 	cGame *Game;
 };
