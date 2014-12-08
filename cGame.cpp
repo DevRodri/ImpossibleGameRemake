@@ -26,6 +26,9 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	}
 	Input.SetMousePosition(SCREEN_RES_X >> 1,SCREEN_RES_Y >> 1);
 
+	//inicializamos deltatime
+	deltaTime = GetTickCount();
+
 	//Carga ficheros graficos
 	Graphics.LoadData();
 
@@ -47,6 +50,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 bool cGame::Loop()
 {
 	bool res;
+	
 	//Input
 	res = ManageInputs();
 	if (!res) return false;
@@ -62,6 +66,8 @@ bool cGame::Loop()
 	res = ManageGraphics();
 	if (!res) return false;
 	
+	deltaTime = GetTickCount() - deltaTime;
+
 	return true;
 }
 
@@ -85,7 +91,7 @@ bool cGame::ManagePhysics()
 	bool res; //cuando se añada la clase de fisicas el "= true" va fuera.
 
 	//aqui se aplica la gravedad a cada iteración y todo lo relacionado con fisicas.
-	res = Physics.ApplyGravity(&Player,0.0f); //aqui hay que poner el deltatime.
+	res = Physics.ApplyGravity(&Player, deltaTime); //aqui hay que poner el deltatime.
 
 	return res;
 }

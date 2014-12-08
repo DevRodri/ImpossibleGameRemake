@@ -35,6 +35,8 @@ public:
 	cPlayer Player;
 	cFisicas Physics;
 
+	float deltaTime;
+
 	int state;
 };
 
