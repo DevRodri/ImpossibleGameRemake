@@ -27,6 +27,7 @@ public:
 	bool ManageLogic();
 	bool ManageGraphics();
 	void Finalize();
+	void ProcessOrder();
 
 	//Clases que posee el juego
 	cGraphicsLayer Graphics;

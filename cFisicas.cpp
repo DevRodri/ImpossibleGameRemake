@@ -17,9 +17,15 @@ void cFisicas::GetGravity(float *gravity)
 bool cFisicas::ApplyGravity(cPlayer *Player,float dt)
 {
 	float velocity;
+	int x, y;
+
 	Player->GetVely(&velocity);
 	velocity = velocity + Gravity * dt;
 	Player->SetVely(velocity);
+
+	Player->GetGlobalPosition(&x, &y);
+	//Player->SetGlobalPosition(x, y + velocity);
+	
 	return true;
 }
 

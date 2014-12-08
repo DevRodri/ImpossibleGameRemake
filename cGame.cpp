@@ -90,6 +90,17 @@ bool cGame::ManagePhysics()
 {
 	bool res; //cuando se añada la clase de fisicas el "= true" va fuera.
 
+	//si el player no toca suelo aplicarle la gravedad, si toca suelo reseteamos la velocidad
+	if (!Physics.Is_Grounded(&Player, &Scene)){ res = Physics.ApplyGravity(&Player, deltaTime); }
+	else { Player.SetVely(0);}
+	// si el player entre en colision matarlo
+	if (Physics.Is_Incollision(&Player, &Scene))
+	{
+		//matamos al jugador
+		//incrementar el contador de intentos
+		//reiniciar el nivel
+		res = true;
+	}
 	//aqui se aplica la gravedad a cada iteración y todo lo relacionado con fisicas.
 	res = Physics.ApplyGravity(&Player, deltaTime); //aqui hay que poner el deltatime.
 
@@ -120,17 +131,31 @@ bool cGame::ManageLogic()
 		break;
 
 	case STATE_GAME: 
+		ProcessOrder();
 		break;
 	}
 
 	return true;
 }
 
+void cGame::ProcessOrder()
+{
+	cMouse *Mouse;
+	cKeyboard *Keyboard;
+
+	Mouse = Input.GetMouse();
+
+	if (Mouse->ButtonDown(LEFT))
+	{
+		if (Physics.Is_Grounded(&Player,&Scene)) Player.SetVely(-10.0f);
+	}
+}
+
 bool cGame::ManageGraphics()
 {
 	bool res;
 
-	res = Graphics.Render(Input.GetMouse(), &Scene, state);
+	res = Graphics.Render(Input.GetMouse(), &Scene, state);// , &Player);
 
 	return res;
 }
