@@ -17,7 +17,10 @@ public:
 	//calcula la posicion global respecto al tamaño total del mapa
 	void SetGlobalPosition(cPlayer *Player, cScene *Scene);
 	void GetGlobalPosition(int *posx, int *posy);
-
+	void SetVely(float vely);
+	void GetVely(float *vely);
+	void SetTileSize(int vely);
+	void GetTileSize(int *vely);
 
 private:
 	int lx, ly; //posicion local del jugador (en pantalla)
