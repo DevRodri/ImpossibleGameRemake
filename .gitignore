@@ -41,3 +41,15 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+*.obj
+Debug/
+DX9SDK/
+Backup*/
+UpgradeLog2.htm
+IsoEngine.vcxproj.filters
+IsoEngine.vcxproj
+IsoEngine.v12.suo
+IsoEngine.sln
+IsoEngine.sdf
+IsoEngine.opensdf
