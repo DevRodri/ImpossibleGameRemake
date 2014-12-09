@@ -3,10 +3,17 @@
 
 cPlayer::cPlayer()
 {
+	tileSize = 32;
+	velocity = 0;
+	lx = 0;
+	ly = 0;
+	gx = 0;
+	gy = 0;
 }
 
 cPlayer::~cPlayer()
 {
+
 }
 
 void cPlayer::SetVely(float vely)

@@ -49,7 +49,7 @@ bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 	}
 
 	//controlamos que no caiga mas alla del suelo hay 32 niveles de altura, si esta en el 33 es que esta ya fuera del suelo
-	if (y > (tsize * 32)) Player->SetGlobalPosition(x, 32 % tsize);;
+	if (y > (tsize * SCENE_GROUND)) Player->SetGlobalPosition(x, SCENE_GROUND % tsize);;
 
 	return true;
 }
