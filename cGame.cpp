@@ -39,8 +39,9 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	Physics.SetGravity(0.01f);
 
 	//Inicializa posicion del jugador
-	Player.SetLocalPosition(0,0);
-	Player.SetGlobalPosition(&Player, &Scene);
+	Player.SetTileSize(32);
+	Player.SetLocalPosition(5,32);
+	Player.SetGlobalPosition(5 * 32, SCENE_GROUND * 32);
 
 
 	return true;
@@ -90,21 +91,32 @@ bool cGame::ManagePhysics()
 {
 	bool res; //cuando se añada la clase de fisicas el "= true" va fuera.
 
-	//si el player no toca suelo aplicarle la gravedad, si toca suelo reseteamos la velocidad
-	if (!Physics.Is_Grounded(&Player, &Scene)){ res = Physics.ApplyGravity(&Player, deltaTime); }
-	else { Player.SetVely(0);}
-	// si el player entre en colision matarlo
-	if (Physics.Is_Incollision(&Player, &Scene))
-	{
-		//matamos al jugador
-		//incrementar el contador de intentos
-		//reiniciar el nivel
-		res = true;
-	}
-	//aqui se aplica la gravedad a cada iteración y todo lo relacionado con fisicas.
-	res = Physics.ApplyGravity(&Player, deltaTime); //aqui hay que poner el deltatime.
+	if (state == STATE_GAME){ // si estamos jugando aplicamos las fisicas
 
-	return res;
+		//si el player no toca suelo aplicarle la gravedad, si toca suelo reseteamos la velocidad
+		if (!Physics.Is_Grounded(&Player, &Scene))
+			{ 
+				res = Physics.ApplyGravity(&Player, &Scene, deltaTime); 
+			}
+		else { 
+				Player.SetVely(0);
+			 }
+
+		// si el player entre en colision matarlo
+		int colision; //si hay colision indica con que ha colisionado 0,1,2,3,4....
+		if (Physics.Is_Incollision(&Player, &Scene, &colision))
+		{
+			//matamos al jugador
+			//incrementar el contador de intentos
+			//reiniciar el nivel
+			res = true;
+		}
+		//aqui se aplica la gravedad a cada iteración y todo lo relacionado con fisicas.
+		//res = Physics.ApplyGravity(&Player,&Scene, deltaTime); //aqui hay que poner el deltatime.
+
+		return true;
+	}
+	else return true;
 }
 
 bool cGame::ManageLogic()

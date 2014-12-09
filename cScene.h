@@ -16,6 +16,7 @@
 
 //Dimension = Area^2
 #define SCENE_AREA		64
+#define SCENE_GROUND	32
 
 class cScene
 {

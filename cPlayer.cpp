@@ -3,12 +3,10 @@
 
 cPlayer::cPlayer()
 {
-	tileSize = 32;
 }
 
 cPlayer::~cPlayer()
 {
-
 }
 
 void cPlayer::SetVely(float vely)
@@ -33,10 +31,11 @@ void cPlayer::GetLocalPosition(int *posx, int *posy)
 	*posy = ly;
 }
 
-void cPlayer::SetGlobalPosition(cPlayer *Player, cScene *Scene)
+void cPlayer::SetGlobalPosition(int posx, int posy)
 {
 	//TODO
-
+	gx = posx;
+	gy = posy;
 	//
 }
 
@@ -45,11 +44,11 @@ void cPlayer::GetGlobalPosition(int *posx, int *posy)
 	*posx = gx;
 	*posy = gy;
 }
-void cPlayer::SetTileSize(int size)
+void cPlayer::SetTileSize(int tsize)
 {
-	tileSize = size;
+	tileSize = tsize;
 }
-void cPlayer::GetTileSize(int *size)
+void cPlayer::GetTileSize(int *tsize)
 {
-	*size = tileSize;
+	*tsize = tileSize;
 }

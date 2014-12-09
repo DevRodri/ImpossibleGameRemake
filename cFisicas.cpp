@@ -14,46 +14,70 @@ void cFisicas::GetGravity(float *gravity)
 	*gravity = Gravity;
 }
 
-bool cFisicas::ApplyGravity(cPlayer *Player,float dt)
+bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 {
 	float velocity;
-	int x, y;
+	int x, y, type,tsize;
+	bool b;
 
 	Player->GetVely(&velocity);
 	velocity = velocity + Gravity * dt;
 	Player->SetVely(velocity);
-
-	//Player->GetGlobalPosition(&x, &y);
-	//Player->SetGlobalPosition(x, y + velocity*dt);
 	
+	Player->GetTileSize(&tsize);
+	Player->GetGlobalPosition(&x, &y);
+	
+	//aqui vamos a situar el player en su posición actual y le sumamos la caida de la gravedad
+	
+	Player->SetGlobalPosition(x, y + velocity*dt);
+
+	// pero si esta suma situa a la pieza encima de una base hay que ponerle la altura de la base
+	//es decir, si la velocidad es de bajada (positiva) y colisiona con un objeto lo ponemos a la altura del objeto.
+	b = Is_Incollision(Player,Scene, &type);
+	
+	if (b && velocity>0)
+	{
+		//hemos colisionado, si la colision es con un cubo de suelo actualizamos la vel a 0 y reposicionamos el player encima del cubo
+		if (type == 1)
+			{
+				int posy;
+				
+				Player->SetVely(0);
+				posy = y + velocity*dt;
+				Player->SetGlobalPosition(x, posy % tsize);
+			}
+	}
+
+	//controlamos que no caiga mas alla del suelo hay 32 niveles de altura, si esta en el 33 es que esta ya fuera del suelo
+	if (y > (tsize * 32)) Player->SetGlobalPosition(x, 32 % tsize);;
+
 	return true;
 }
 
-bool cFisicas::TileColision(cScene *Scene,int posx,int posy)
+bool cFisicas::TileColision(cScene *Scene,int posx,int posy,int *type)
 {
-	int objeto;
-	objeto = Scene->map[posx][posy];
+
+	*type = Scene->map[posx][posy];
 
 	//0-vacia no hay colision
-	if ((objeto) == 0){ return false; }
+	if ((*type) == 0){ return false; }
 	
 	//1-cubo,si el cubo esta a la derecha hay que colisionar, si esta debajo no????? este caso hay que mirarlo.
-	if ((objeto) == 1){ 
+	if ((*type) == 1){
 		return true; 
 	}
-	
 	//2-pincho siempre hay colision, este caso se puede afinar si vemos que colisiona demasiado pronto
-	if ((objeto) == 2){ return false; }
+	if ((*type) == 2){ return false; }
 	
 	//3-suelo que mata hay colision
-	if ((objeto) == 3){ return true; }
+	if ((*type) == 3){ return true; }
 	
 	//4-suelo normal no hay colision
-	if ((objeto) == 4){ return false; }
+	if ((*type) == 4){ return false; }
 	else  { return false; }
 }
 
-bool cFisicas::Is_Incollision(cPlayer *Player,cScene *Scene)
+bool cFisicas::Is_Incollision(cPlayer *Player, cScene *Scene, int *type)
 {
 	int posx, posy,tsize;
 	//obtener las coordenadas del jugador en el mundo
@@ -96,30 +120,35 @@ bool cFisicas::Is_Incollision(cPlayer *Player,cScene *Scene)
 		divresult = div(y, tsize);
 		ty = divresult.quot;
 
-		b = TileColision(Scene, tx, ty);
+		b = TileColision(Scene, tx, ty, type);
+
+		if (b) return true;
 
 		divresult = div(x1, tsize);
 		tx1 = divresult.quot;
 		divresult = div(y1, tsize);
 		ty1 = divresult.quot;
 
-		b1 = TileColision(Scene, tx1, ty1);
+		b1 = TileColision(Scene, tx1, ty1, type);
+		if (b1) return true;
 
 		divresult = div(x2, tsize);
 		tx2 = divresult.quot;
 		divresult = div(y2, tsize);
 		ty2 = divresult.quot;
 
-		b2 = TileColision(Scene, tx1, ty1);
+		b2 = TileColision(Scene, tx2, ty2, type);
+		if (b2) return true;
 
 		divresult = div(x3, tsize);
 		tx3 = divresult.quot;
 		divresult = div(y3, tsize);
 		ty3 = divresult.quot;
 
-		b3 = TileColision(Scene, tx1, ty1);
+		b3 = TileColision(Scene, tx3, ty3, type);
+		if (b3) return true;
 
-		return b||b1||b2||b3;
+		return b||b1||b2||b3; // o false que es lo mismo
 
 	}
 }
@@ -133,7 +162,7 @@ bool cFisicas::Is_Grounded(cPlayer *Player, cScene *Scene)
 	Player->GetTileSize(&tsize);
 	//un objeto toca suelo cuando el objeto que tiene justo debajo es del tipo cubo o es el suelo.
 	
-	if (posy == 0){ return true; } //esta en el suelo;
+	if (posy == SCENE_GROUND * tsize){ return true; } //esta en el suelo;
 	
 	if (posy % 32 == 0) //puede ser que este encima de un cubo, pero no se sabe.
 	{
