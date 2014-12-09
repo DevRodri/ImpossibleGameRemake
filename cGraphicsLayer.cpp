@@ -527,8 +527,9 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 		fx, fy,
 		pantx, panty;
 
-	fx = Scene->cx + SCENE_WIDTH;
-	fy = Scene->cy + SCENE_HEIGHT;
+
+	fx = Scene->cx + SCENE_AREA; //numero de tiles horizontales que caben.
+	fy = Scene->cy + SCENE_AREA; //idem pero en vertical
 
 	for (y = Scene->cy; y<fy; y++)
 	{
@@ -536,7 +537,7 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 
 		for (x = Scene->cx; x<fx; x++)
 		{
-			pantx = SCENE_Xo + ((x - Scene->cx) << 5);
+			pantx = Scene->x +((x - Scene->cx) << 5);
 
 			n = Scene->map[y][x];
 

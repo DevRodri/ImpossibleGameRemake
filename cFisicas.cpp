@@ -17,8 +17,12 @@ void cFisicas::GetGravity(float *gravity)
 bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 {
 	float velocity;
-	int x, y, type,tsize,posfy;
+	int x, y, type,tsize,posfy, posfx;
 	bool b;
+
+	//velocidad de la escena (movimiento de la misma). Falta definir bien los atributos y no hacerlo tan chapuza.
+	Scene->x -= Scene->velocity * dt;
+
 
 	Player->GetVely(&velocity);
 	velocity = velocity + Gravity * dt;
@@ -28,8 +32,10 @@ bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 	Player->GetGlobalPosition(&x, &y);
 	
 	//aqui vamos a situar el player en su posición actual y le sumamos la caida de la gravedad
-	
 	posfy = y + velocity*dt;
+
+	//nueva posicion del player en funcion de la velocidad de la escena
+	posfx = x + Scene->velocity/4 * dt; // si no divido por 4 va más rapido y no se porque.
 	
 	// prueba de movimiento de player
 
@@ -70,7 +76,7 @@ bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 			}
 	}
 
-	Player->SetGlobalPosition(x, posfy);
+	Player->SetGlobalPosition(posfx, posfy);
 	//controlamos que no caiga mas alla del suelo hay 32 niveles de altura, si esta en el 33 es que esta ya fuera del suelo
 	
 	if (posfy > (tsize * SCENE_GROUND)) { 

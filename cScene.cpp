@@ -8,6 +8,8 @@ cScene::cScene()
 {
 	cx=0;
 	cy=0;
+	velocity = 3;
+	x = SCENE_Xo;
 }
 cScene::~cScene(){}
 

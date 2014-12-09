@@ -11,7 +11,7 @@
 #define SCENE_Yo		0
 
 //Visible part
-#define SCENE_WIDTH		20
+#define SCENE_WIDTH		24
 #define SCENE_HEIGHT	17
 
 //Dimension = Area^2
@@ -30,6 +30,8 @@ public:
 
 	int map[SCENE_AREA][SCENE_AREA];
 	int cx,cy;
+	float velocity;
+	int x;
 };
 
 
