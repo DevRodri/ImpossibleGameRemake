@@ -13,7 +13,7 @@ public:
 	cFisicas();
 	virtual ~cFisicas();
 
-	float Gravity=0.01f;
+	float Gravity;
 	//funcion que aplica gravedad a la escena
 	bool ApplyGravity(cPlayer *Player,cScene *Scene, float dt);
 	//funcion que detecta si el  Player esta en colisión con algun objeto.

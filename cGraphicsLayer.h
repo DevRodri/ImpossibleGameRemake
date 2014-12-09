@@ -13,12 +13,12 @@
 #include <D3DX9.h>
 #include "cScene.h"
 #include "cMouse.h"
-//#include "cPlayer.h"
+#include "cPlayer.h"
 
 class cGraphicsLayer
 {
 	//Custom vertex format
-	const DWORD D3DFVF_TLVERTEX = D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1;
+	static const DWORD D3DFVF_TLVERTEX = D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 
 	//Custom vertex
 	struct TLVERTEX
@@ -41,11 +41,11 @@ public:
 
 	void LoadData();
 	void UnLoadData();
-	bool Render(cMouse *Mouse, cScene *Scene, int state/*, cPlayer *Player, DWORD deltaTime*/);
+	bool Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Player);
 
 	bool PintaEscena(cScene *Scene);
-	//bool PintaPlayer(cScene *Scene/*, cPlayer *Player*/);
 	bool PintaRaton(cMouse *Mouse);
+	bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player);
 	bool DrawRect(RECT rc, D3DCOLOR color);
 
 	IDirect3DTexture9 *LoadTexture(char *fileName, D3DCOLOR colorkey);
@@ -86,7 +86,7 @@ private:
 	IDirect3DIndexBuffer9* indexBatchBuffer;
 
 	//Max amount of vertices that can be put in the batching buffer
-	const int BATCH_BUFFER_SIZE = 1000;
+	static const int BATCH_BUFFER_SIZE = 1000;
 
 	//Vertices currently in the batching buffer
 	int numBatchVertices;

@@ -418,7 +418,7 @@ void cGraphicsLayer::EndBatchDrawing()
 	numBatchVertices = 0;
 }
 
-bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state /*, cPlayer *Player, DWORD deltaTime*/)
+bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Player)
 {
 
 	RECT rc_o;
@@ -470,18 +470,10 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state /*, cPlayer 
 
 		///aqui hay que cargar los elementos y pintarlos donde toca.
 
-
-		/*//pintar player
 		BeginBatchDrawing(texCharacters);
-		//rectangulo de toda la pantalla
-		int px, py;
-		//Player->GetPosition(&px, &py);
-		SetRect(&rc_o, 0, 0, 32, 32);
-		SetRect(&rc_d, px, py, px + 32, py + 32);
-		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
-		//pintamos.
+		PintaPlayer(Scene, Player);
 		EndBatchDrawing();
-		break;*/
+		break;
 	}
 
 	/*BeginBatchDrawing(texture);
@@ -556,5 +548,21 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 
 		}
 	}
+	return true;
+}
+
+bool cGraphicsLayer::PintaPlayer(cScene *Scene,cPlayer *Player)
+{
+	int px, py,tsize;
+	
+	RECT rc_o;
+	RECT rc_d;
+
+	Player->GetGlobalPosition(&px, &py);
+	Player->GetTileSize(&tsize);
+	SetRect(&rc_o, 0, 0, tsize, tsize);
+	SetRect(&rc_d, px, py, px + tsize, py + tsize);
+	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+	//pintamos.
 	return true;
 }

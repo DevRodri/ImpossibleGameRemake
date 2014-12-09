@@ -17,7 +17,7 @@ void cFisicas::GetGravity(float *gravity)
 bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 {
 	float velocity;
-	int x, y, type,tsize;
+	int x, y, type,tsize,posfy;
 	bool b;
 
 	Player->GetVely(&velocity);
@@ -29,7 +29,17 @@ bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 	
 	//aqui vamos a situar el player en su posición actual y le sumamos la caida de la gravedad
 	
-	Player->SetGlobalPosition(x, y + velocity*dt);
+	posfy = y + velocity*dt;
+	
+	// prueba de movimiento de player
+
+	//int posfx;	
+	//if (velocity >0) posfx = x + velocity*dt;
+	//else posfx = x - velocity*dt;
+	//x=posfx;
+	//Player->SetGlobalPosition(x, posfy);
+	//
+	
 
 	// pero si esta suma situa a la pieza encima de una base hay que ponerle la altura de la base
 	//es decir, si la velocidad es de bajada (positiva) y colisiona con un objeto lo ponemos a la altura del objeto.
@@ -40,24 +50,51 @@ bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 		//hemos colisionado, si la colision es con un cubo de suelo actualizamos la vel a 0 y reposicionamos el player encima del cubo
 		if (type == 1)
 			{
-				int posy;
 				
 				Player->SetVely(0);
-				posy = y + velocity*dt;
-				Player->SetGlobalPosition(x, posy % tsize);
+				
+				div_t divresult;
+				divresult = div(posfy, tsize);
+				posfy = divresult.quot * tsize;
+
+			}
+		if (type == 4)
+			{
+				
+				Player->SetVely(0);
+				
+				div_t divresult;
+				divresult = div(posfy, tsize);
+				posfy = divresult.quot * tsize;
+
 			}
 	}
 
+	Player->SetGlobalPosition(x, posfy);
 	//controlamos que no caiga mas alla del suelo hay 32 niveles de altura, si esta en el 33 es que esta ya fuera del suelo
-	if (y > (tsize * SCENE_GROUND)) Player->SetGlobalPosition(x, SCENE_GROUND % tsize);;
-
+	
+	if (posfy > (tsize * SCENE_GROUND)) { 
+			//Player->SetGlobalPosition(x, SCENE_GROUND % tsize);  
+			posfy = SCENE_GROUND*tsize;
+			Player->SetGlobalPosition(x, posfy);
+			Player->SetVely(0);
+	}
+	
+	//* if temporal */
+	/*if (posfy > 224)
+		{ 
+			posfy = 224;
+			Player->SetGlobalPosition(x, posfy);
+			Player->SetVely(0);
+		}*/
+	///////
 	return true;
 }
 
 bool cFisicas::TileColision(cScene *Scene,int posx,int posy,int *type)
 {
 
-	*type = Scene->map[posx][posy];
+	*type = Scene->map[posy][posx];
 
 	//0-vacia no hay colision
 	if ((*type) == 0){ return false; }
@@ -67,13 +104,13 @@ bool cFisicas::TileColision(cScene *Scene,int posx,int posy,int *type)
 		return true; 
 	}
 	//2-pincho siempre hay colision, este caso se puede afinar si vemos que colisiona demasiado pronto
-	if ((*type) == 2){ return false; }
+	if ((*type) == 2){ return true; }
 	
 	//3-suelo que mata hay colision
 	if ((*type) == 3){ return true; }
 	
-	//4-suelo normal no hay colision
-	if ((*type) == 4){ return false; }
+	//4-suelo normal no hay colision, ponemos que si de momento.
+	if ((*type) == 4){ return true; }
 	else  { return false; }
 }
 
@@ -162,7 +199,7 @@ bool cFisicas::Is_Grounded(cPlayer *Player, cScene *Scene)
 	Player->GetTileSize(&tsize);
 	//un objeto toca suelo cuando el objeto que tiene justo debajo es del tipo cubo o es el suelo.
 	
-	if (posy == SCENE_GROUND * tsize){ return true; } //esta en el suelo;
+	if (posy >= SCENE_GROUND * tsize) { return true; } //esta en el suelo;
 	
 	if (posy % 32 == 0) //puede ser que este encima de un cubo, pero no se sabe.
 	{
@@ -178,7 +215,8 @@ bool cFisicas::Is_Grounded(cPlayer *Player, cScene *Scene)
 		if (posx % 32 == 0) //estamos justo en una sola tile, tenemos que mriar solo debajo nuestro
 		{
 			int objeto;
-			objeto = Scene->map[tx][ty + 1];
+			//objeto = Scene->map[tx][ty + 1];
+			objeto = Scene->map[ty + 1][tx];
 			if (objeto==1 || objeto==4)//suelo o cubo
 			{
 				return true;
@@ -188,9 +226,9 @@ bool cFisicas::Is_Grounded(cPlayer *Player, cScene *Scene)
 		else //estamos en medio de 2 hay que mirar las 2 y es la suma de las 2.
 		{
 			int objeto;
-			objeto = Scene->map[tx][tx + 1];
+			objeto = Scene->map[ty + 1][tx];
 			int objeto1;
-			objeto1 = Scene->map[tx+1][ty + 1];
+			objeto1 = Scene->map[ty + 1][tx + 1];
 
 			if ((objeto == 1 || objeto == 4) || (objeto1 == 1 || objeto1 == 4))//suelo o cubo
 			{
