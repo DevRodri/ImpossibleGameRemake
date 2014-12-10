@@ -7,6 +7,15 @@
 #include "cPlayer.h"
 #include "cScene.h"
 
+#define VACIO	0
+#define CUBO	1
+#define PINCHO	2
+#define AGUJERO	3
+#define SUELO	4
+
+#define CUBICO		0
+#define ESFERICO	1
+
 class cFisicas
 {
 public:
@@ -17,7 +26,7 @@ public:
 	//funcion que aplica gravedad a la escena
 	bool ApplyGravity(cPlayer *Player,cScene *Scene, float dt);
 	//funcion que detecta si el  Player esta en colisión con algun objeto.
-	bool Is_Incollision(cPlayer *Player, cScene *Scene,int *type);
+	bool Is_Incollision(cPlayer *Player, cScene *Scene, int *type, int boundigbox, bool *down, bool *right);
 	//funcion que te dice si el player esta tocando suelo o pieza solida.
 	bool Is_Grounded(cPlayer *Player, cScene *Scene);
 	void SetGravity(float gravity);
@@ -26,7 +35,8 @@ public:
 private:
 	//funcion que nos dice si el player esta grounded
 	
-	bool TileColision(cScene *Scene, int posx, int posy,int *type);
+	bool TileColisionCubic(cScene *Scene, int posx, int posy, int *type, int tsize);
+	bool TileColisionSferic(cScene *Scene,int playerx, int playery, int posx, int posy, int *type, int tsize);
 };
 
 #endif

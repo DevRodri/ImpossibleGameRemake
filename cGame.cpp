@@ -106,16 +106,15 @@ bool cGame::ManagePhysics()
 
 		// si el player entre en colision matarlo
 		int colision; //si hay colision indica con que ha colisionado 0,1,2,3,4....
-		if (Physics.Is_Incollision(&Player, &Scene, &colision))
+		bool down, right;
+		if (Physics.Is_Incollision(&Player, &Scene, &colision, ESFERICO, &down, &right))
 		{
 			//matamos al jugador
 			//incrementar el contador de intentos
 			//reiniciar el nivel
-			if (colision==4){res = true;} // es el suelo y no cuenta.
+			if (colision==SUELO){res = true;} // es el suelo y no cuenta.
 			res = true;
 		}
-		//aqui se aplica la gravedad a cada iteración y todo lo relacionado con fisicas.
-		//res = Physics.ApplyGravity(&Player,&Scene, deltaTime); //aqui hay que poner el deltatime.
 
 		return true;
 	}
