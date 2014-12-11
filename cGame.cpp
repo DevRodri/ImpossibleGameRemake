@@ -37,7 +37,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	Scene.LoadMap("map.txt");
 
 	//Inicializa Gravedad
-	Physics.SetGravity(0.8f);
+	Physics.SetGravity(2.0f);
 
 	//Inicializa posicion del jugador
 	Player.SetTileSize(32);
@@ -137,6 +137,7 @@ bool cGame::ManageLogic()
 			//Play button
 			if (Mouse->In(256, 315, 430, 350))
 			{
+				ResetLevel();
 				state = STATE_GAME;
 			}
 			//Exit button
@@ -168,15 +169,35 @@ void cGame::ProcessOrder()
 
 	Keyboard = Input.GetKeyboard();
 
-	if(Keyboard->KeyDown(1)){
-		//bla
+	
+	if (Keyboard->KeyDown(DIK_LEFT)){
+		int x, y;
+		Player.GetGlobalPosition(&x,&y);
+		Player.SetGlobalPosition(x-1,y);
+		Player.GetLocalPosition(&x, &y);
+		Player.SetLocalPosition(x-1, y);
+		
+	}
+	if (Keyboard->KeyDown(DIK_RIGHT)){
+		int x, y;
+		Player.GetGlobalPosition(&x, &y);
+		Player.SetGlobalPosition(x + 1, y);
+		Player.GetLocalPosition(&x, &y);
+		Player.SetLocalPosition(x + 1, y);
+
+	}
+	if (Keyboard->KeyDown(DIK_SPACE)){
+		if (Physics.Is_Grounded(&Player, &Scene))
+		{
+			Player.SetVely(-20.5f);
+		}
 	}
 
 	if (Mouse->ButtonDown(LEFT))
 	{
 		if (Physics.Is_Grounded(&Player, &Scene)) 
 		{
-			Player.SetVely(-10.0f);
+			Player.SetVely(-20.5f);
 		}
 	}
 }
@@ -190,6 +211,11 @@ bool cGame::ManageGraphics()
 	return res;
 }
 
+void cGame::ResetLevel()
+{
+	Player.SetLocalPosition(5, 7);
+	Player.SetGlobalPosition(5 * 32, 7 * 32);
+}
 void cGame::Finalize()
 {
 	Graphics.UnLoadData();

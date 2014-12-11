@@ -28,6 +28,7 @@ public:
 	bool ManageGraphics();
 	void Finalize();
 	void ProcessOrder();
+	void ResetLevel();
 
 	//Clases que posee el juego
 	cGraphicsLayer Graphics;
