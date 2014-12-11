@@ -559,7 +559,7 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene,cPlayer *Player)
 	RECT rc_o;
 	RECT rc_d;
 
-	Player->GetGlobalPosition(&px, &py);
+	Player->GetLocalPosition(&px, &py);
 	Player->GetTileSize(&tsize);
 	SetRect(&rc_o, 0, 0, tsize, tsize);
 	SetRect(&rc_d, px, py, px + tsize, py + tsize);
