@@ -34,7 +34,7 @@ public:
 
 private:
 	//funcion que nos dice si el player esta grounded
-	
+	bool doesCubeIntersectSphere(int cx1, int cy1, int cx2, int cy2, int spx, int spy, int Radio);
 	bool TileColisionCubic(cScene *Scene, int posx, int posy, int *type, int tsize);
 	bool TileColisionSferic(cScene *Scene,int playerx, int playery, int posx, int posy, int *type, int tsize);
 };
