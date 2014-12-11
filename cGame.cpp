@@ -190,6 +190,16 @@ void cGame::ProcessOrder()
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
 			Player.SetVely(-20.5f);
+			//segun el juego original el salto de largo es de 4 espacios
+			//|X|_|_|_|_|x|
+			// de alto salta exactamente 1.5 de su altura
+			//|_|_|_|x|_|_|_|
+			//| | |X|X|X| | |
+			//|_|X|X|_|X|X|_|
+			//|X|X| | | |X|X|
+			//|X|_|_|_|_|_|X|
+			//
+
 		}
 	}
 
