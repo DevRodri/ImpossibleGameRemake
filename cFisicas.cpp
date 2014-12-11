@@ -17,7 +17,7 @@ void cFisicas::GetGravity(float *gravity)
 bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 {
 	float velocity;
-	int x, y, type,tsize,posfy, posfx;
+	int x, y, type,tsize,posfy, posfx,localx,localy;
 	bool b, down, right;
 
 	
@@ -31,13 +31,15 @@ bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 	
 	Player->GetTileSize(&tsize);
 	Player->GetGlobalPosition(&x, &y);
-	//posfx = x;
+	Player->GetLocalPosition(&localx, &localy);
+	posfx = y;
+	posfx = x;
+
 	//aqui vamos a situar el player en su posición actual y le sumamos la caida de la gravedad
 	posfy = y + velocity*dt;
-	posfx = x + 1;
+	localy = localy + velocity*dt;
 	//nueva posicion del player en funcion de la velocidad de la escena
-	//posfx = x + Scene->velocity * dt; // si no divido por 4 va más rapido y no se porque.
-
+	
 	// pero si esta suma situa a la pieza encima de una base hay que ponerle la altura de la base
 	//es decir, si la velocidad es de bajada (positiva) y colisiona con un objeto lo ponemos a la altura del objeto.
 	b = Is_Incollision(Player, Scene, &type, ESFERICO, &down, &right);
@@ -53,6 +55,7 @@ bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 				div_t divresult;
 				divresult = div(posfy, tsize);
 				posfy = divresult.quot * tsize;
+				localy = (localy/tsize)*tsize;
 
 			}
 		if (type == SUELO)
@@ -63,18 +66,21 @@ bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 				div_t divresult;
 				divresult = div(posfy, tsize);
 				posfy = divresult.quot * tsize;
+				localy = (localy / tsize)*tsize;
 
 			}
 	}
-
-	Player->SetGlobalPosition(posfx, posfy);
-	//controlamos que no caiga mas alla del suelo hay 32 niveles de altura, si esta en el 33 es que esta ya fuera del suelo
 	
-	if (posfy > (tsize * SCENE_GROUND)) { 
-			posfy = SCENE_GROUND*tsize;
-			Player->SetGlobalPosition(x, posfy);
-			Player->SetVely(0);
+	//controlamos que no caiga mas alla del suelo hay 32 niveles de altura, si esta en el 33 es que esta ya fuera del suelo
+
+	if (posfy > (tsize * SCENE_GROUND)) {
+		posfy = SCENE_GROUND*tsize;
+		localy = SCENE_GROUND*tsize;
+		Player->SetVely(0);
 	}
+	
+	Player->SetGlobalPosition(posfx, posfy);
+	Player->SetLocalPosition (localx, localy);
 	
 	return true;
 }
@@ -114,18 +120,16 @@ bool cFisicas::TileColisionSferic(cScene *Scene,int playerx,int playery, int pos
 	int pctx1, pcty1;
 	float distancia;
 
-	pctx1 = (tx*tsize)- tsize + (tsize / 2);
-	pcty1 = (ty*tsize)- tsize  + (tsize / 2);
+	//centramos el punto del player
+	playerx = playerx + tsize / 2;
+	playery = playery + tsize / 2;
+
+	pctx1 = (tx*tsize) + (tsize / 2);
+	pcty1 = (ty*tsize) + (tsize / 2);
 
 	//distancia d(a,b)=sqtr((x2-x1)^2+(y2-y1)^2)
 	distancia = sqrt(pow(float(playerx - pctx1), 2) + pow(float(playery - pcty1), 2));
 
-	//int distanciax, distanciay;
-
-	//distanciax = playerx - pctx1;
-	//distanciay = playery - pcty1;
-
-	//if ((abs(distanciax) < tsize) || (abs(distanciay) < tsize))
 	if (distancia < tsize)
 	{ //posible impacto!!!
 		int tipo;
@@ -151,8 +155,8 @@ bool cFisicas::Is_Incollision(cPlayer *Player, cScene *Scene, int *type, int bou
 	
 	//obtener las coordenadas del jugador en el mundo
 	Player->GetGlobalPosition(&posx, &posy);
+	
 	Player->GetTileSize(&tsize);
-
 	
 	if (boundigbox == CUBICO)
 	{
@@ -204,7 +208,7 @@ bool cFisicas::Is_Incollision(cPlayer *Player, cScene *Scene, int *type, int bou
 			{
 				if (posy%tsize == 0)
 					{//estamos justo en una tile concreta. aqui podemos mirar pero nunca habrá una colision
-					return TileColisionCubic(Scene, posx, posy, type, tsize);
+					return TileColisionSferic(Scene, posx, posy, posx, posy, type, tsize);
 					}
 				else
 					{// estamos en una x fija pero en el aire con la ficha
@@ -212,7 +216,7 @@ bool cFisicas::Is_Incollision(cPlayer *Player, cScene *Scene, int *type, int bou
 
 						//no es necesario calcular distancias porque estan alineados es igual.
 						bool b;
-						b = TileColisionCubic(Scene, posx, posy + tsize, type, tsize); //miramos justo debajo a ver que hay.
+						b = TileColisionSferic(Scene,posx, posy, posx, posy + tsize, type, tsize); //miramos justo debajo a ver que hay.
 						*down = b;
 						return b;	
 					}
@@ -252,8 +256,8 @@ bool cFisicas::Is_Incollision(cPlayer *Player, cScene *Scene, int *type, int bou
 					
 					bool b,b1,b2,b3;
 					int tipo1,tipo2,tipo3;
-					//b=TileColisionSferic(Scene, posx, posy, x, y, type, tsize); // colision con la tile de arriba a la izquierda, no la vamos a mirar no nos interesa.
 					
+					b=TileColisionSferic(Scene, posx, posy, x, y, type, tsize); // colision con la tile de arriba a la izquierda, no la vamos a mirar no nos interesa.	
 					b1 = TileColisionSferic(Scene, posx, posy, x1, y1, &tipo1, tsize); // colision con la tile de arriba a la derecha, la miramos porque podemos tener una colision lateral aqui
 					if (b1) { *right = true; *type = tipo1; }
 					b2 = TileColisionSferic(Scene, posx, posy, x2, y2, &tipo2, tsize); // colision con la tile de abajo a la derecha, la miramos proque podemos tener una colision abajo
@@ -268,15 +272,8 @@ bool cFisicas::Is_Incollision(cPlayer *Player, cScene *Scene, int *type, int bou
 						{
 						if ((tipo2 == CUBO) || (tipo3 == CUBO)) { *type == CUBO; }
 						}
-					
-					//por si chocas por abajo y por la derecha significa que te la has pegado con una pared, eso quiere decir que debes devolver el cubo lateral que es muerte directa
-					/*if (right && down)
-						{
-							//Si colisiona lateralmente y por abajo
-							*type = tipo1;
-						}
-					*/
-					return b1 || b2 || b3;
+		
+					return b || b1 || b2 || b3;
 
 				}
 			}
