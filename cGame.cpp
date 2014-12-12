@@ -44,8 +44,8 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 	Player.SetTileSize(32);
 	//Player.SetLocalPosition(5,32);
 	//Player.SetGlobalPosition(5 * 32, SCENE_GROUND * 32);
-	Player.SetLocalPosition(5 * 32, 7 * 32);
-	Player.SetGlobalPosition(5 * 32, 7 * 32);
+	Player.SetLocalPosition(5 * 32, (29 - HEIGHT_MAX_TILES + 4) * 32);
+	Player.SetGlobalPosition(5 * 32, 29 * 32);
 
 
 	return true;
