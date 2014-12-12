@@ -35,7 +35,7 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 
 	//Carga mapa lógico
 	Scene.LoadMap("map.txt");
-	Scene.SetVelocity(2.0f);
+	Scene.SetVelocity(9.0f);
 
 	//Inicializa Gravedad
 	Physics.SetGravity(1.0f);
@@ -98,6 +98,7 @@ bool cGame::ManagePhysics()
 	if (state == STATE_GAME){ // si estamos jugando aplicamos las fisicas
 
 		//si el player no toca suelo aplicarle la gravedad, si toca suelo reseteamos la velocidad
+		//si la distancia entre la X global y el final del mapa es menor que WIDTH_MAX_TILES, no muevo mas el mapa.
 		Physics.MoveScene(&Player, &Scene);
 		res = Physics.ApplyGravity(&Player, &Scene, deltaTime);
 
@@ -144,7 +145,7 @@ bool cGame::ManageLogic()
 			{
 
 				state = STATE_GAME;
-				Scene.SetVelocity(2.0f);
+				Scene.SetVelocity(9.0f);
 			}
 			//Exit button
 			else if (Mouse->In(255, 395, 410, 430))

@@ -262,6 +262,8 @@ void cGraphicsLayer::LoadData()
 	texCharacters = LoadTexture("characters.png", 0x00ff00ff);
 	//Mouse pointers
 	texMouse = LoadTexture("mouse.png", 0x00ff00ff);
+	//Textura animación muerte
+	texDie = LoadTexture("dieAnim.png", 0x00ff00ff);
 }
 
 void cGraphicsLayer::UnLoadData()
@@ -289,6 +291,11 @@ void cGraphicsLayer::UnLoadData()
 	if (texMouse)
 	{
 		texMouse->Release();
+		texMouse = NULL;
+	}
+	if (texDie)
+	{
+		texDie->Release();
 		texMouse = NULL;
 	}
 }
@@ -496,13 +503,15 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 bool cGraphicsLayer::PintaMuerte(cPlayer *Player)
 {
 	int px, py;
+	int seq;
+	Player->GetDieAnimationSeq(&seq);
 
 	RECT rc_o;
 	RECT rc_d;
 
 	Player->GetLocalPosition(&px, &py);
-	BeginBatchDrawing(texCharacters); //texturaMuerte
-	SetRect(&rc_o, 0, 0, 64, 64);
+	BeginBatchDrawing(texDie); //texturaMuerte
+	SetRect(&rc_o, seq * 64, 0, 64 + seq * 64, 64);
 	SetRect(&rc_d, px, py, px + 64, py + 64);
 	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 	EndBatchDrawing();
