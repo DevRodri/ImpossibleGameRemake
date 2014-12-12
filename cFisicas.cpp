@@ -17,12 +17,18 @@ void cFisicas::GetGravity(float *gravity)
 
 void cFisicas::MoveScene(cPlayer *Player, cScene *Scene)
 {
-	int y, x;
+	int y, x,plx,ply;
 	float vel;
 	Scene->GetVelocity(&vel);
 	Player->GetGlobalPosition(&x, &y);
+
+	//Movimiento en X
 	x = x + vel;
 	Scene->gx +=vel;
+
+	//Movimiento en Y ( limite superior y límite inferior )
+
+	//volvemos a guardar las variables
 	Player->SetGlobalPosition(x, y);
 }
 
@@ -297,7 +303,7 @@ bool cFisicas::Is_Incollision(cPlayer *Player, cScene *Scene, int *type, int bou
 
 				if (down)
 				{
-					if ((tipo2 == CUBO) || (tipo3 == CUBO)) { *type == CUBO; }
+					if ((tipo2 == CUBO) || (tipo3 == CUBO)) { *type = CUBO; }
 				}
 
 				return b || b1 || b2 || b3;

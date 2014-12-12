@@ -35,7 +35,7 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 
 	//Carga mapa lógico
 	Scene.LoadMap("map.txt");
-	Scene.SetVelocity(10.0f);
+	Scene.SetVelocity(8.5f);
 
 	//Inicializa Gravedad
 	Physics.SetGravity(1.5f);
@@ -145,7 +145,7 @@ bool cGame::ManageLogic()
 			{
 
 				state = STATE_GAME;
-				Scene.SetVelocity(10.0f);
+				Scene.SetVelocity(8.5f);
 			}
 			//Exit button
 			else if (Mouse->In(255, 395, 410, 430))
