@@ -114,7 +114,8 @@ bool cGame::ManagePhysics()
 			//matamos al jugador
 			//incrementar el contador de intentos
 			//reiniciar el nivel
-			if (colision == PINCHO){ state = STATE_DEATH; }
+			
+			if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ state = STATE_DEATH; }
 			if (colision == SUELO){ res = true; } // es el suelo y no cuenta.
 			res = true;
 		}
