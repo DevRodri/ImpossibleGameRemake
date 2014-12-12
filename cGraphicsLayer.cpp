@@ -512,7 +512,7 @@ bool cGraphicsLayer::PintaMuerte(cPlayer *Player)
 	Player->GetLocalPosition(&px, &py);
 	BeginBatchDrawing(texDie); //texturaMuerte
 	SetRect(&rc_o, seq * 64, 0, 64 + seq * 64, 64);
-	SetRect(&rc_d, px, py, px + 64, py + 64);
+	SetRect(&rc_d, px - 16, py - 16, px + 48, py + 48);
 	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 	EndBatchDrawing();
 
