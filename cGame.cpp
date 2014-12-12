@@ -7,25 +7,25 @@
 cGame::cGame() {}
 cGame::~cGame(){}
 
-bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
+bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 {
 	bool res;
 	cLog *Log = cLog::Instance();
 
-	res = Graphics.Init(hWnd,exclusive);
-	if(!res)
+	res = Graphics.Init(hWnd, exclusive);
+	if (!res)
 	{
 		Log->Msg("Error initializing Graphics!");
 		return false;
 	}
 
-	res = Input.Init(hInst,hWnd,exclusive,USE_MOUSE|USE_KEYBOARD);
-	if(!res)
+	res = Input.Init(hInst, hWnd, exclusive, USE_MOUSE | USE_KEYBOARD);
+	if (!res)
 	{
 		Log->Msg("Error initializing Input!");
 		return false;
 	}
-	Input.SetMousePosition(SCREEN_RES_X >> 1,SCREEN_RES_Y >> 1);
+	Input.SetMousePosition(SCREEN_RES_X >> 1, SCREEN_RES_Y >> 1);
 
 	//inicializamos deltatime
 	//deltaTime = GetTickCount();
@@ -35,7 +35,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 
 	//Carga mapa lógico
 	Scene.LoadMap("map.txt");
-	Scene.SetVelocity(10.0f);
+	Scene.SetVelocity(2.0f);
 
 	//Inicializa Gravedad
 	Physics.SetGravity(1.0f);
@@ -44,7 +44,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	Player.SetTileSize(32);
 	//Player.SetLocalPosition(5,32);
 	//Player.SetGlobalPosition(5 * 32, SCENE_GROUND * 32);
-	Player.SetLocalPosition(5*32,7*32);
+	Player.SetLocalPosition(5 * 32, 7 * 32);
 	Player.SetGlobalPosition(5 * 32, 7 * 32);
 
 
@@ -100,11 +100,11 @@ bool cGame::ManagePhysics()
 		//si el player no toca suelo aplicarle la gravedad, si toca suelo reseteamos la velocidad
 		Physics.MoveScene(&Player, &Scene);
 		res = Physics.ApplyGravity(&Player, &Scene, deltaTime);
-		
+
 		if (Physics.Is_Grounded(&Player, &Scene))
-			{ 
+		{
 			Player.SetVely(0);
-			}
+		}
 
 		// si el player entre en colision matarlo
 		int colision; //si hay colision indica con que ha colisionado 0,1,2,3,4....
@@ -114,8 +114,9 @@ bool cGame::ManagePhysics()
 			//matamos al jugador
 			//incrementar el contador de intentos
 			//reiniciar el nivel
-			//if (colision==PINCHO){ResetLevel();} 
-			if (colision==SUELO){res = true;} // es el suelo y no cuenta.
+			
+			if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ state = STATE_DEATH; }
+			if (colision == SUELO){ res = true; } // es el suelo y no cuenta.
 			res = true;
 		}
 
@@ -135,13 +136,15 @@ bool cGame::ManageLogic()
 	switch (state)
 	{
 	case STATE_MAIN:
+
 		if (Mouse->ButtonDown(LEFT))
 		{
 			//Play button
 			if (Mouse->In(256, 315, 430, 350))
 			{
-				
+
 				state = STATE_GAME;
+				Scene.SetVelocity(2.0f);
 			}
 			//Exit button
 			else if (Mouse->In(255, 395, 410, 430))
@@ -151,13 +154,24 @@ bool cGame::ManageLogic()
 		}
 		break;
 
-	case STATE_GAME: 
+	case STATE_GAME:
 
 		if (Keyboard->KeyDown(DIK_ESCAPE)){
 			ResetLevel();
 			state = STATE_MAIN;
 		}
 		ProcessOrder();
+		break;
+
+	case STATE_DEATH:
+
+		Scene.SetVelocity(0.0f);
+
+		Player.PlayDieAnimation();
+		if (Player.IsDeath()){
+			state = STATE_MAIN;
+			ResetLevel();
+		}
 		break;
 	}
 
@@ -173,21 +187,21 @@ void cGame::ProcessOrder()
 
 	Keyboard = Input.GetKeyboard();
 
-	
-/*	if (Keyboard->KeyDown(DIK_LEFT)){
-		int x, y;
-		Player.GetGlobalPosition(&x,&y);
-		Player.SetGlobalPosition(x-1,y);
-		Player.GetLocalPosition(&x, &y);
-		Player.SetLocalPosition(x-1, y);
-		
+
+	/*	if (Keyboard->KeyDown(DIK_LEFT)){
+	int x, y;
+	Player.GetGlobalPosition(&x,&y);
+	Player.SetGlobalPosition(x-1,y);
+	Player.GetLocalPosition(&x, &y);
+	Player.SetLocalPosition(x-1, y);
+
 	}
 	if (Keyboard->KeyDown(DIK_RIGHT)){
-		int x, y;
-		Player.GetGlobalPosition(&x, &y);
-		Player.SetGlobalPosition(x + 1, y);
-		Player.GetLocalPosition(&x, &y);
-		Player.SetLocalPosition(x + 1, y);
+	int x, y;
+	Player.GetGlobalPosition(&x, &y);
+	Player.SetGlobalPosition(x + 1, y);
+	Player.GetLocalPosition(&x, &y);
+	Player.SetLocalPosition(x + 1, y);
 
 	}*/
 	if (Keyboard->KeyDown(DIK_SPACE)){
@@ -209,7 +223,7 @@ void cGame::ProcessOrder()
 
 	if (Mouse->ButtonDown(LEFT))
 	{
-		if (Physics.Is_Grounded(&Player, &Scene)) 
+		if (Physics.Is_Grounded(&Player, &Scene))
 		{
 			Player.SetVely(-10.5f);
 		}
@@ -227,9 +241,11 @@ bool cGame::ManageGraphics()
 
 void cGame::ResetLevel()
 {
-	Player.SetLocalPosition(5*32, 7*32);
+	Player.SetLocalPosition(5 * 32, 7 * 32);
 	Player.SetGlobalPosition(5 * 32, 7 * 32);
-	Scene.SetGlobalPosition(0,0);
+	Player.ResetDieAnimation();
+
+	Scene.SetGlobalPosition(0, 0);
 }
 void cGame::Finalize()
 {

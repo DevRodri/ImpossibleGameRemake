@@ -12,6 +12,7 @@
 #define STATE_MAIN	0
 #define STATE_GAME	1
 #define STATE_PAUSE	2
+#define STATE_DEATH 3
 
 class cGame
 {
@@ -19,9 +20,9 @@ public:
 	cGame();
 	virtual ~cGame();
 
-	bool Init(HWND hWnd,HINSTANCE hInst,bool exclusive);
+	bool Init(HWND hWnd, HINSTANCE hInst, bool exclusive);
 
-	bool Loop(); 
+	bool Loop();
 	bool ManageInputs();
 	bool ManagePhysics();
 	bool ManageLogic();

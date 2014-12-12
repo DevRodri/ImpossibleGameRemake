@@ -5,6 +5,9 @@ cPlayer::cPlayer()
 {
 	tileSize = 32;
 	velocity = 0;
+	death = false;
+	delay = 0;
+	seq = 0;
 }
 
 cPlayer::~cPlayer()
@@ -14,7 +17,7 @@ cPlayer::~cPlayer()
 
 void cPlayer::SetVely(float vely)
 {
-	velocity=vely; //velocidad del jugador en el eje Y
+	velocity = vely; //velocidad del jugador en el eje Y
 }
 
 void cPlayer::GetVely(float *vely)
@@ -54,4 +57,29 @@ void cPlayer::SetTileSize(int tsize)
 void cPlayer::GetTileSize(int *tsize)
 {
 	*tsize = tileSize;
+}
+
+void cPlayer::PlayDieAnimation()
+{
+	delay++;
+	if (delay >= 10)
+	{
+		seq++;
+		if (seq > 3) {
+			seq = 0;
+			death = true;
+		}
+		delay = 0;
+	}
+}
+
+void cPlayer::ResetDieAnimation()
+{
+	delay = seq = 0;
+	death = false;
+}
+
+bool cPlayer::IsDeath()
+{
+	return death;
 }
