@@ -35,9 +35,10 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 
 	//Carga mapa lógico
 	Scene.LoadMap("map.txt");
+	Scene.SetVelocity(10.0f);
 
 	//Inicializa Gravedad
-	Physics.SetGravity(2.0f);
+	Physics.SetGravity(1.0f);
 
 	//Inicializa posicion del jugador
 	Player.SetTileSize(32);
@@ -97,6 +98,7 @@ bool cGame::ManagePhysics()
 	if (state == STATE_GAME){ // si estamos jugando aplicamos las fisicas
 
 		//si el player no toca suelo aplicarle la gravedad, si toca suelo reseteamos la velocidad
+		Physics.MoveScene(&Player, &Scene);
 		res = Physics.ApplyGravity(&Player, &Scene, deltaTime);
 		
 		if (Physics.Is_Grounded(&Player, &Scene))
@@ -112,6 +114,7 @@ bool cGame::ManagePhysics()
 			//matamos al jugador
 			//incrementar el contador de intentos
 			//reiniciar el nivel
+			//if (colision==PINCHO){ResetLevel();} 
 			if (colision==SUELO){res = true;} // es el suelo y no cuenta.
 			res = true;
 		}
@@ -137,7 +140,7 @@ bool cGame::ManageLogic()
 			//Play button
 			if (Mouse->In(256, 315, 430, 350))
 			{
-				ResetLevel();
+				
 				state = STATE_GAME;
 			}
 			//Exit button
@@ -151,6 +154,7 @@ bool cGame::ManageLogic()
 	case STATE_GAME: 
 
 		if (Keyboard->KeyDown(DIK_ESCAPE)){
+			ResetLevel();
 			state = STATE_MAIN;
 		}
 		ProcessOrder();
@@ -170,7 +174,7 @@ void cGame::ProcessOrder()
 	Keyboard = Input.GetKeyboard();
 
 	
-	if (Keyboard->KeyDown(DIK_LEFT)){
+/*	if (Keyboard->KeyDown(DIK_LEFT)){
 		int x, y;
 		Player.GetGlobalPosition(&x,&y);
 		Player.SetGlobalPosition(x-1,y);
@@ -185,13 +189,13 @@ void cGame::ProcessOrder()
 		Player.GetLocalPosition(&x, &y);
 		Player.SetLocalPosition(x + 1, y);
 
-	}
+	}*/
 	if (Keyboard->KeyDown(DIK_SPACE)){
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
-			Player.SetVely(-20.5f);
+			Player.SetVely(-10.5f);
 			//segun el juego original el salto de largo es de 4 espacios
-			//|X|_|_|_|_|x|
+			//|X|_|_|_|_|X|
 			// de alto salta exactamente 1.5 de su altura
 			//|_|_|_|x|_|_|_|
 			//| | |X|X|X| | |
@@ -207,7 +211,7 @@ void cGame::ProcessOrder()
 	{
 		if (Physics.Is_Grounded(&Player, &Scene)) 
 		{
-			Player.SetVely(-20.5f);
+			Player.SetVely(-10.5f);
 		}
 	}
 }
@@ -225,6 +229,7 @@ void cGame::ResetLevel()
 {
 	Player.SetLocalPosition(5*32, 7*32);
 	Player.SetGlobalPosition(5 * 32, 7 * 32);
+	Scene.SetGlobalPosition(0,0);
 }
 void cGame::Finalize()
 {

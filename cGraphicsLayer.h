@@ -57,7 +57,7 @@ public:
 	void SetupQuad();
 	void FillIndexBuffer();
 	void BeginBatchDrawing(IDirect3DTexture9* texture);
-
+	void AplicaAlpha(int alpha);
 
 	//Add a quad to the batching buffer
 	void AddQuad(RECT rSource, RECT rDest, D3DCOLOR colour);

@@ -10,12 +10,15 @@
 #define SCENE_Xo		0
 #define SCENE_Yo		0
 
-//Visible part
-#define SCENE_WIDTH		24
-#define SCENE_HEIGHT	17
+//Tiles que caben en pantalla
+#define WIDTH_MAX_TILES		25
+#define HEIGHT_MAX_TILES	19 //son 18,75 pero si pintamos 18 se quedaria un hueco sin pintar y se veria feo...
 
-//Dimension = Area^2
-#define SCENE_AREA		64
+//Tamaño del mapa en tiles
+#define SCENE_AREA_X	64
+#define SCENE_AREA_Y	64	
+
+//Habrá que retocarla para el tema físicas, acorde con el mapa.
 #define SCENE_GROUND	32
 
 class cScene
@@ -28,10 +31,20 @@ public:
 
 	void LoadMap(char *file);
 
-	int map[SCENE_AREA][SCENE_AREA];
-	int cx,cy;
-	float velocity;
-	int x;
+	void GetGlobalPosition(int *gx, int *gy);
+	void SetGlobalPosition(int gx, int gy);
+
+	void CalculateCellonX(int *cell, int gx);
+
+
+	void GetVelocity(float *vel);
+	void SetVelocity(float vel);
+
+	void GetMapPosition(int *val, int x, int y); //Obtiene en "val" la posicion (x,y) del mapa
+
+	int map[SCENE_AREA_X][SCENE_AREA_Y];
+	int gx, gy; //posicion global actual en el mapa
+	float velocity; //velocidad de desplazamiento del mapa
 };
 
 

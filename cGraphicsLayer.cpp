@@ -460,29 +460,15 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		////////////////////////////////////
 
 		//pintar escena
-		BeginBatchDrawing(texTiles);
+		//BeginBatchDrawing(texTiles);
 		PintaEscena(Scene);
-		EndBatchDrawing();
+		//EndBatchDrawing();
 
-
-		//Scene->cx += 0.05 * deltaTime;
-		//if (Scene->cx == SCENE_AREA)Scene->cx = 0;
-
-		///aqui hay que cargar los elementos y pintarlos donde toca.
-
-		BeginBatchDrawing(texCharacters);
+		///aqui hay que cargar los elementos y pintarlos donde toca.		
 		PintaPlayer(Scene, Player);
-		EndBatchDrawing();
+		
 		break;
 	}
-
-	/*BeginBatchDrawing(texture);
-
-	//Draw 16 quads
-	for (int quads = 0; quads < 16; quads++)
-	AddQuad(&rSource[quads], &rDest[quads], 0xFFFFFFFF);
-
-	EndBatchDrawing();*/
 
 	PintaRaton(Mouse);
 
@@ -519,34 +505,46 @@ bool cGraphicsLayer::PintaRaton(cMouse *Mouse)
 
 bool cGraphicsLayer::PintaEscena(cScene *Scene)
 {
-	//esto hay que cambiarlo entero. hay que pintar la escena en funcion de la velocidad desplazamiento, y donde se encuentra ahora.
 	RECT rc_o;
 	RECT rc_d;
 
-	int x, y, n,
+	int n,
 		fx, fy,
 		pantx, panty;
 
+	//Celda inicial a pintar
+	int cellx = Scene->gx / 32;
+	int celly = Scene->gy / 32;
 
-	fx = Scene->cx + SCENE_AREA; //numero de tiles horizontales que caben.
-	fy = Scene->cy + SCENE_AREA; //idem pero en vertical
+	//Celda final a pintar
+	fx = cellx + WIDTH_MAX_TILES + 1;
+	fy = celly + HEIGHT_MAX_TILES + 1;
 
-	for (y = Scene->cy; y<fy; y++)
+	for (int y = celly; y < fy; y++)
 	{
-		panty = SCENE_Yo + ((y - Scene->cy) << 5);
-
-		for (x = Scene->cx; x<fx; x++)
+		panty = (y - Scene->gy) + 31 * y;
+		for (int x = cellx; x < fx; x++)
 		{
-			pantx = Scene->x +((x - Scene->cx) << 5);
+			
+			pantx = (x - Scene->gx) + 31 * x;
 
-			n = Scene->map[y][x];
+			Scene->GetMapPosition(&n, y, x);
+			
+			int temp_i;
+			temp_i = fx-x;
+			if ((temp_i <= 0) || (temp_i >= 25)) { AplicaAlpha(0); }
+			if ((temp_i == 1) || (temp_i == 24)) { AplicaAlpha(50); }
+			if ((temp_i == 2) || (temp_i == 23)) { AplicaAlpha(100); }
+			if ((temp_i == 3) || (temp_i == 22)) { AplicaAlpha(150); }
+			if ((temp_i == 4) || (temp_i == 21)) {AplicaAlpha(200);}
 
+			BeginBatchDrawing(texTiles);
 			SetRect(&rc_o, n << 5, 0, (n + 1) << 5, 32);
-
 			SetRect(&rc_d, pantx, panty, pantx + 32, panty + 32);
-
 			AddQuad(rc_o, rc_d, 0xFFFFFFFF);
-
+			EndBatchDrawing();
+			
+			AplicaAlpha(255);
 		}
 	}
 	return true;
@@ -561,9 +559,26 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene,cPlayer *Player)
 
 	Player->GetLocalPosition(&px, &py);
 	Player->GetTileSize(&tsize);
+	BeginBatchDrawing(texCharacters);
 	SetRect(&rc_o, 0, 0, tsize, tsize);
 	SetRect(&rc_d, px, py, px + tsize, py + tsize);
 	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+	EndBatchDrawing();
 	//pintamos.
 	return true;
+}
+void cGraphicsLayer::AplicaAlpha(int alpha)
+{
+	DWORD AlphaValue;
+	AlphaValue = D3DCOLOR_ARGB(alpha, 0, 0, 0);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_CONSTANT, AlphaValue);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CONSTANT);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
 }

@@ -24,19 +24,20 @@ public:
 
 	float Gravity;
 	//funcion que aplica gravedad a la escena
-	bool ApplyGravity(cPlayer *Player,cScene *Scene, float dt);
+	bool ApplyGravity(cPlayer *Player, cScene *Scene, float dt);
 	//funcion que detecta si el  Player esta en colisión con algun objeto.
 	bool Is_Incollision(cPlayer *Player, cScene *Scene, int *type, int boundigbox, bool *down, bool *right);
 	//funcion que te dice si el player esta tocando suelo o pieza solida.
 	bool Is_Grounded(cPlayer *Player, cScene *Scene);
 	void SetGravity(float gravity);
 	void GetGravity(float *gravity);
+	void MoveScene(cPlayer *Player, cScene *Scene);
 
 private:
 	//funcion que nos dice si el player esta grounded
 	bool doesCubeIntersectSphere(int cx1, int cy1, int cx2, int cy2, int spx, int spy, int Radio);
 	bool TileColisionCubic(cScene *Scene, int posx, int posy, int *type, int tsize);
-	bool TileColisionSferic(cScene *Scene,int playerx, int playery, int posx, int posy, int *type, int tsize);
+	bool TileColisionSferic(cScene *Scene, int playerx, int playery, int posx, int posy, int *type, int tsize);
 };
 
 #endif
