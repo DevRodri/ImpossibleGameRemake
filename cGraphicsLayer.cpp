@@ -1,4 +1,3 @@
-
 #include "cGraphicsLayer.h"
 #include "cGame.h"
 #include "cLog.h"
@@ -466,14 +465,47 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 
 		///aqui hay que cargar los elementos y pintarlos donde toca.		
 		PintaPlayer(Scene, Player);
-		
+
 		break;
+
+	case STATE_DEATH:
+
+		//para pintar el fondo con QUADS
+		BeginBatchDrawing(texGame);
+		SetRect(&rc_o, 0, 0, 800, 600);
+		SetRect(&rc_d, 0, 0, 800, 600);
+		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+		EndBatchDrawing();
+
+		//pintar escena
+		PintaEscena(Scene);
+
+		//pintar animacion de muerte
+		PintaMuerte(Player);
+
 	}
 
 	PintaRaton(Mouse);
 
 	EndDrawing();
 	Present();
+
+	return true;
+}
+
+bool cGraphicsLayer::PintaMuerte(cPlayer *Player)
+{
+	int px, py;
+
+	RECT rc_o;
+	RECT rc_d;
+
+	Player->GetLocalPosition(&px, &py);
+	BeginBatchDrawing(texCharacters); //texturaMuerte
+	SetRect(&rc_o, 0, 0, 64, 64);
+	SetRect(&rc_d, px, py, px + 64, py + 64);
+	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+	EndBatchDrawing();
 
 	return true;
 }
@@ -525,35 +557,35 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 		panty = (y - Scene->gy) + 31 * y;
 		for (int x = cellx; x < fx; x++)
 		{
-			
+
 			pantx = (x - Scene->gx) + 31 * x;
 
 			Scene->GetMapPosition(&n, y, x);
-			
+
 			int temp_i;
-			temp_i = fx-x;
+			temp_i = fx - x;
 			if ((temp_i <= 0) || (temp_i >= 25)) { AplicaAlpha(0); }
 			if ((temp_i == 1) || (temp_i == 24)) { AplicaAlpha(50); }
 			if ((temp_i == 2) || (temp_i == 23)) { AplicaAlpha(100); }
 			if ((temp_i == 3) || (temp_i == 22)) { AplicaAlpha(150); }
-			if ((temp_i == 4) || (temp_i == 21)) {AplicaAlpha(200);}
+			if ((temp_i == 4) || (temp_i == 21)) { AplicaAlpha(200); }
 
 			BeginBatchDrawing(texTiles);
 			SetRect(&rc_o, n << 5, 0, (n + 1) << 5, 32);
 			SetRect(&rc_d, pantx, panty, pantx + 32, panty + 32);
 			AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 			EndBatchDrawing();
-			
+
 			AplicaAlpha(255);
 		}
 	}
 	return true;
 }
 
-bool cGraphicsLayer::PintaPlayer(cScene *Scene,cPlayer *Player)
+bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 {
-	int px, py,tsize;
-	
+	int px, py, tsize;
+
 	RECT rc_o;
 	RECT rc_d;
 

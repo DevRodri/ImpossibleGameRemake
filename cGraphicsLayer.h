@@ -47,6 +47,7 @@ public:
 	bool PintaRaton(cMouse *Mouse);
 	bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player);
 	bool DrawRect(RECT rc, D3DCOLOR color);
+	bool PintaMuerte(cPlayer *Player);
 
 	IDirect3DTexture9 *LoadTexture(char *fileName, D3DCOLOR colorkey);
 	int ClearBuffer();
