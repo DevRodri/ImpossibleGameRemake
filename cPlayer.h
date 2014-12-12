@@ -24,16 +24,17 @@ public:
 
 	void PlayDieAnimation();
 	void ResetDieAnimation();
+	void GetDieAnimationSeq(int *seq);
 	bool IsDeath();
+
 
 private:
 	int lx, ly; //posicion local del jugador (en pantalla)
 	int gx, gy; //posicion global del jugador (en todo el mapa)
 	int tileSize; //tamaño de la tile del personaje
 	float velocity; //velocidad del jugador en el eje Y
-
-	int delay, seq; //control de la animación de muerte
 	bool death;
+	int delay, seq; //control de la animación de muerte
 };
 
 #endif

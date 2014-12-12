@@ -73,7 +73,7 @@ private:
 	LPD3DXSPRITE g_pSprite;
 
 	//Texturas de juego
-	LPDIRECT3DTEXTURE9 texMain, texGame;
+	LPDIRECT3DTEXTURE9 texMain, texGame, texDie;
 	LPDIRECT3DTEXTURE9 texTiles, texCharacters, texMouse;
 
 	//Capabilities of graphics adapter

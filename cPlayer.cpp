@@ -62,10 +62,10 @@ void cPlayer::GetTileSize(int *tsize)
 void cPlayer::PlayDieAnimation()
 {
 	delay++;
-	if (delay >= 10)
+	if (delay >= 5)
 	{
 		seq++;
-		if (seq > 3) {
+		if (seq > 5) {
 			seq = 0;
 			death = true;
 		}
@@ -77,6 +77,11 @@ void cPlayer::ResetDieAnimation()
 {
 	delay = seq = 0;
 	death = false;
+}
+
+void cPlayer::GetDieAnimationSeq(int *val)
+{
+	*val = seq;
 }
 
 bool cPlayer::IsDeath()
