@@ -35,10 +35,10 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 
 	//Carga mapa lógico
 	Scene.LoadMap("map.txt");
-	Scene.SetVelocity(9.0f);
+	Scene.SetVelocity(10.0f);
 
 	//Inicializa Gravedad
-	Physics.SetGravity(1.0f);
+	Physics.SetGravity(1.5f);
 
 	//Inicializa posicion del jugador
 	Player.SetTileSize(32);
@@ -145,7 +145,7 @@ bool cGame::ManageLogic()
 			{
 
 				state = STATE_GAME;
-				Scene.SetVelocity(9.0f);
+				Scene.SetVelocity(10.0f);
 			}
 			//Exit button
 			else if (Mouse->In(255, 395, 410, 430))
@@ -208,7 +208,7 @@ void cGame::ProcessOrder()
 	if (Keyboard->KeyDown(DIK_SPACE)){
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
-			Player.SetVely(-10.5f);
+			Player.SetVely(-15.5f);
 			//segun el juego original el salto de largo es de 4 espacios
 			//|X|_|_|_|_|X|
 			// de alto salta exactamente 1.5 de su altura
@@ -226,7 +226,7 @@ void cGame::ProcessOrder()
 	{
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
-			Player.SetVely(-10.5f);
+			Player.SetVely(-15.5f);
 		}
 	}
 }
@@ -242,11 +242,11 @@ bool cGame::ManageGraphics()
 
 void cGame::ResetLevel()
 {
-	Player.SetLocalPosition(5 * 32, 7 * 32);
-	Player.SetGlobalPosition(5 * 32, 7 * 32);
+	Player.SetLocalPosition(5 * 32, (29 - HEIGHT_MAX_TILES + 4) * 32);
+	Player.SetGlobalPosition(5 * 32, 29 * 32);
 	Player.ResetDieAnimation();
 
-	Scene.SetGlobalPosition(0, 0);
+	Scene.SetGlobalPosition(0, (29 - HEIGHT_MAX_TILES + 5) * 32);
 }
 void cGame::Finalize()
 {

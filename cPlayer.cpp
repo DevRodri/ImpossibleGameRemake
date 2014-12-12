@@ -62,7 +62,7 @@ void cPlayer::GetTileSize(int *tsize)
 void cPlayer::PlayDieAnimation()
 {
 	delay++;
-	if (delay >= 5)
+	if (delay >= 3)
 	{
 		seq++;
 		if (seq > 5) {
