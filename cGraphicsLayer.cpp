@@ -201,6 +201,7 @@ void cGraphicsLayer::InitRendering(int resWidth, int resHeight)
 	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	alpha1 = 0; alpha2 = 0; alpha3 = 0;
 }
 
 bool cGraphicsLayer::Finalize()
@@ -255,6 +256,10 @@ void cGraphicsLayer::LoadData()
 	//Main menu
 	texMain = LoadTexture("main.png", NULL);
 	//GUI game
+	texGame3 = LoadTexture("game3.png", NULL);
+	//GUI game
+	texGame2 = LoadTexture("game2.png", NULL);
+	//GUI game
 	texGame = LoadTexture("game.png", NULL);
 	//Tiles
 	texTiles = LoadTexture("tiles.png", 0x00ff00ff);
@@ -277,6 +282,16 @@ void cGraphicsLayer::UnLoadData()
 	{
 		texGame->Release();
 		texGame = NULL;
+	}
+	if (texGame2)
+	{
+		texGame2->Release();
+		texGame2 = NULL;
+	}
+	if (texGame3)
+	{
+		texGame3->Release();
+		texGame3 = NULL;
 	}
 	if (texTiles)
 	{
@@ -452,12 +467,7 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		//pintar fondo de pantalla
 
 		//para pintar el fondo con QUADS
-		BeginBatchDrawing(texGame);
-		SetRect(&rc_o, 0, 0, 800, 600);
-		SetRect(&rc_d, 0, 0, 800, 600);
-		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
-		EndBatchDrawing();
-
+		PintaFondo(Scene);
 		//para pintar el fondo con SPRITES
 		//g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 		//g_pSprite->Draw(texGame, NULL, NULL, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
@@ -622,4 +632,70 @@ void cGraphicsLayer::AplicaAlpha(int alpha)
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CONSTANT);
 	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
 	g_pD3DDevice->SetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
+}
+
+void cGraphicsLayer::PintaFondo(cScene *Scene)
+{
+	RECT rc_o;
+	RECT rc_d;
+
+	BeginBatchDrawing(texGame3);
+	SetRect(&rc_o, 0, 0, 800, 600);
+	SetRect(&rc_d, 0, 0, 800, 600);
+	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+	EndBatchDrawing();
+
+	if (Scene->fondo == 0){
+		alpha1 = alpha1 + 10;
+		if (alpha1 > 255) alpha1 = 255;
+		AplicaAlpha(alpha1);
+
+		BeginBatchDrawing(texGame);
+		SetRect(&rc_o, 0, 0, 800, 600);
+		SetRect(&rc_d, 0, 0, 800, 600);
+		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+		EndBatchDrawing();
+		AplicaAlpha(255);
+		alpha2 = 0;
+		alpha3 = 0;
+	}
+	if (Scene->fondo == 1){
+
+		alpha2 = alpha2 + 10;
+		if (alpha2 > 255) alpha2 = 255;
+
+		BeginBatchDrawing(texGame);
+		SetRect(&rc_o, 0, 0, 800, 600);
+		SetRect(&rc_d, 0, 0, 800, 600);
+		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+		EndBatchDrawing();
+
+		AplicaAlpha(alpha2);
+		BeginBatchDrawing(texGame3);
+		SetRect(&rc_o, 0, 0, 800, 600);
+		SetRect(&rc_d, 0, 0, 800, 600);
+		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+		EndBatchDrawing();
+
+		AplicaAlpha(255);
+		alpha1 = 0;
+		alpha3 = 0;
+
+	}
+	if (Scene->fondo == 2){
+
+		alpha3 = alpha3 + 10;
+		if (alpha3 > 255) alpha3 = 255;
+		AplicaAlpha(alpha3);
+
+		BeginBatchDrawing(texGame2);
+		SetRect(&rc_o, 0, 0, 800, 600);
+		SetRect(&rc_d, 0, 0, 800, 600);
+		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+		EndBatchDrawing();
+
+		AplicaAlpha(255);
+		alpha2 = 0;
+		alpha1 = 0;
+	}
 }

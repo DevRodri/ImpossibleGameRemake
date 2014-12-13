@@ -19,7 +19,7 @@
 #define SCENE_AREA_Y	1280
 
 //Habrá que retocarla para el tema físicas, acorde con el mapa.
-#define SCENE_GROUND	32
+#define SCENE_GROUND	31
 
 class cScene
 {
@@ -45,6 +45,8 @@ public:
 	int map[SCENE_AREA_X][SCENE_AREA_Y];
 	int gx, gy; //posicion global actual en el mapa
 	float velocity; //velocidad de desplazamiento del mapa
+	int fondo; // 0 fondo normal azul, 1 fundido negro, 2 fondo rojo
+
 };
 
 

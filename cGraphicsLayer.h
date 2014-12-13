@@ -59,7 +59,7 @@ public:
 	void FillIndexBuffer();
 	void BeginBatchDrawing(IDirect3DTexture9* texture);
 	void AplicaAlpha(int alpha);
-
+	void PintaFondo(cScene *Scene);
 	//Add a quad to the batching buffer
 	void AddQuad(RECT rSource, RECT rDest, D3DCOLOR colour);
 	//End batched drawing (put all quads in the buffer on screen)
@@ -73,7 +73,7 @@ private:
 	LPD3DXSPRITE g_pSprite;
 
 	//Texturas de juego
-	LPDIRECT3DTEXTURE9 texMain, texGame, texDie;
+	LPDIRECT3DTEXTURE9 texMain, texGame3, texGame2, texGame, texDie;
 	LPDIRECT3DTEXTURE9 texTiles, texCharacters, texMouse;
 
 	//Capabilities of graphics adapter
@@ -96,6 +96,7 @@ private:
 	//Info on texture used for batched drawing
 	float batchTexWidth;
 	float batchTexHeight;
+	int alpha1, alpha2, alpha3;
 };
 
 
