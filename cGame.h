@@ -38,6 +38,7 @@ public:
 	cScene Scene;
 	cPlayer Player;
 	cFisicas Physics;
+	cInterface Interface;
 
 	float deltaTime;
 

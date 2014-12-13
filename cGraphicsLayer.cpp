@@ -269,6 +269,8 @@ void cGraphicsLayer::LoadData()
 	texMouse = LoadTexture("mouse.png", 0x00ff00ff);
 	//Textura animación muerte
 	texDie = LoadTexture("dieAnim.png", 0x00ff00ff);
+	//Score
+	texNumbers = LoadTexture("numbers.png", 0x00ff00ff);
 }
 
 void cGraphicsLayer::UnLoadData()
@@ -312,6 +314,11 @@ void cGraphicsLayer::UnLoadData()
 	{
 		texDie->Release();
 		texMouse = NULL;
+	}
+	if (texNumbers)
+	{
+		texNumbers->Release();
+		texNumbers = NULL;
 	}
 }
 
@@ -483,7 +490,10 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 
 		///aqui hay que cargar los elementos y pintarlos donde toca.		
 		PintaPlayer(Scene, Player);
-
+		//Score
+		BeginBatchDrawing(texNumbers,0.0f);
+		PintaScore(Scene);
+		EndBatchDrawing();
 		break;
 
 	case STATE_DEATH:
@@ -500,6 +510,7 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 
 		//pintar animacion de muerte
 		PintaMuerte(Player);
+
 
 	}
 
@@ -613,16 +624,6 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 	Player->GetTileSize(&tsize);
 	BeginBatchDrawing(texCharacters, 0.0f);
 
-	// hay 6 posiciones posibles y cada 32 pixeles de altura hay que hacer las 6
-	
-	// de 0 a 5 zona 6*32
-	// de 6 a 10
-	// de 11 a 16
-	// de 17 a 21
-	// de 22 a 27
-	// de 28 a 31
-	
-	//32 = 90 grados
 	int temp = py % tsize;
 	
 	if ((temp == 0))	{ SetRect(&rc_o, 240, 32, 288, 80); vuelta = 0;}
@@ -635,22 +636,7 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 		if (vuelta == 1){ SetRect(&rc_o, 0, 32, 48, 80); vuelta++; }
 		if (vuelta == 0){ SetRect(&rc_o, 240, 32, 288, 80); vuelta++; }
 	}
-	
-	/*if ((temp >= 6) && (temp <= 10))	SetRect(&rc_o, 0, 32, 48, 80);// de 0 a 5.3 zona 6*32
-	if ((temp >= 11) && (temp <= 16))	SetRect(&rc_o, 48, 32, 96, 80);// de 0 a 5.3 zona 6*32
-	if ((temp >= 17) && (temp <= 21))	SetRect(&rc_o, 96, 32, 144, 80);// de 0 a 5.3 zona 6*32
-	if ((temp >= 22) && (temp <= 27))	SetRect(&rc_o, 144, 32, 192, 80);// de 0 a 5.3 zona 6*32
-	if ((temp >= 28) && (temp <= 31))	SetRect(&rc_o, 192, 32, 240, 80);// de 0 a 5.3 zona 6*32
-	*/
-	/*if ((temp >= 0) && (temp <= 5))		SetRect(&rc_o, 240, 32, 288, 80);// de 0 a 5.3 zona 6*32
-	if ((temp >= 6) && (temp <= 10))	SetRect(&rc_o, 0, 32, 48, 80);// de 0 a 5.3 zona 6*32
-	if ((temp >=11) && (temp <= 16))	SetRect(&rc_o, 48, 32, 96, 80);// de 0 a 5.3 zona 6*32
-   	if ((temp >= 17) && (temp <= 21))	SetRect(&rc_o, 96, 32, 144, 80);// de 0 a 5.3 zona 6*32
-	if ((temp >= 22) && (temp <= 27))	SetRect(&rc_o, 144, 32, 192, 80);// de 0 a 5.3 zona 6*32
-	if ((temp >= 28) && (temp <= 31))	SetRect(&rc_o, 192, 32, 240, 80);// de 0 a 5.3 zona 6*32
-	*/
 
-	//SetRect(&rc_o, 0, 0, tsize, tsize);
 	SetRect(&rc_d, px-16, py-16, px + 40, py + 40);
 	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 	EndBatchDrawing();
@@ -737,4 +723,50 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 		alpha2 = 0;
 		alpha1 = 0;
 	}
+}
+bool cGraphicsLayer::PintaScore(cScene *Scene)
+{
+
+	int TempScore;
+	Interface.GetScore(&TempScore);
+	int Marcador1, Marcador2, Marcador3;
+
+	Marcador1 = TempScore % 10;
+	Marcador2 = TempScore % 100 / 10;
+	Marcador3 = TempScore % 1000 / 100;
+
+	RECT Attempt;
+	RECT m1;
+	RECT m2;
+	RECT m3;
+	RECT rc_sc2;
+
+	//Attempt
+	SetRect(&Attempt, 0, 50, 256, 110);
+	SetRect(&rc_sc2, 300, SCORE_Y, 300 + 128, SCORE_Y + 30);
+	AddQuad(Attempt, rc_sc2, 0xFFFFFFFF);
+	int cent = 0;
+
+	if (TempScore > 100){
+		cent = 42;
+		SetRect(&m1, 0 + (40 * Marcador3), 0, 40 + (40 * Marcador3), 50);
+		SetRect(&rc_sc2, SCORE_X + cent, SCORE_Y, SCORE_X + 18 + cent, SCORE_Y + 28);//primer marcador
+		AddQuad(m1, rc_sc2, 0xFFFFFFFF);
+	}
+
+	if (TempScore > 10){
+
+		SetRect(&m2, 0 + (40 * Marcador2), 0, 40 + (40 * Marcador2), 50);
+		SetRect(&rc_sc2, SCORE_X + 20 + cent, SCORE_Y, SCORE_X + 38 + cent, SCORE_Y + 28);//segon marcador
+		AddQuad(m2, rc_sc2, 0xFFFFFFFF);
+	}
+
+	SetRect(&m3, 0 + (40 * Marcador1), 0, 40 + (40 * Marcador1), 50);
+	SetRect(&rc_sc2, SCORE_X + 40 + cent, SCORE_Y, SCORE_X + 56 + cent, SCORE_Y + 28);//tercer marcador
+	AddQuad(m3, rc_sc2, 0xFFFFFFFF);
+
+
+
+	return true;
+
 }

@@ -14,6 +14,7 @@
 #include "cScene.h"
 #include "cMouse.h"
 #include "cPlayer.h"
+#include "cInterface.h"
 
 class cGraphicsLayer
 {
@@ -42,7 +43,7 @@ public:
 	void LoadData();
 	void UnLoadData();
 	bool Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Player);
-
+	bool PintaScore(cScene *Scene);
 	bool PintaEscena(cScene *Scene);
 	bool PintaRaton(cMouse *Mouse);
 	bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player);
@@ -74,7 +75,7 @@ private:
 
 	//Texturas de juego
 	LPDIRECT3DTEXTURE9 texMain, texGame3, texGame2, texGame, texDie;
-	LPDIRECT3DTEXTURE9 texTiles, texCharacters, texMouse;
+	LPDIRECT3DTEXTURE9 texTiles, texCharacters, texMouse, texNumbers;
 
 	//Capabilities of graphics adapter
 	D3DCAPS9 d3dCaps;
@@ -97,6 +98,7 @@ private:
 	float batchTexWidth;
 	float batchTexHeight;
 	int alpha1, alpha2, alpha3,vuelta;
+	cInterface Interface;
 };
 
 
