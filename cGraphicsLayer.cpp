@@ -447,7 +447,7 @@ void cGraphicsLayer::EndBatchDrawing()
 	numBatchVertices = 0;
 }
 
-bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Player)
+bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Player, cInterface *Interface)
 {
 
 	RECT rc_o;
@@ -491,9 +491,7 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		///aqui hay que cargar los elementos y pintarlos donde toca.		
 		PintaPlayer(Scene, Player);
 		//Score
-		BeginBatchDrawing(texNumbers,0.0f);
-		PintaScore(Scene);
-		EndBatchDrawing();
+		PintaScore(Scene, Interface);
 		break;
 
 	case STATE_DEATH:
@@ -724,11 +722,11 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 		alpha1 = 0;
 	}
 }
-bool cGraphicsLayer::PintaScore(cScene *Scene)
+bool cGraphicsLayer::PintaScore(cScene *Scene, cInterface *Interface)
 {
 
 	int TempScore;
-	Interface.GetScore(&TempScore);
+	Interface->GetScore(&TempScore);
 	int Marcador1, Marcador2, Marcador3;
 
 	Marcador1 = TempScore % 10;
@@ -740,7 +738,7 @@ bool cGraphicsLayer::PintaScore(cScene *Scene)
 	RECT m2;
 	RECT m3;
 	RECT rc_sc2;
-
+	BeginBatchDrawing(texNumbers, 0.0f);
 	//Attempt
 	SetRect(&Attempt, 0, 50, 256, 110);
 	SetRect(&rc_sc2, 300, SCORE_Y, 300 + 128, SCORE_Y + 30);
@@ -764,8 +762,7 @@ bool cGraphicsLayer::PintaScore(cScene *Scene)
 	SetRect(&m3, 0 + (40 * Marcador1), 0, 40 + (40 * Marcador1), 50);
 	SetRect(&rc_sc2, SCORE_X + 40 + cent, SCORE_Y, SCORE_X + 56 + cent, SCORE_Y + 28);//tercer marcador
 	AddQuad(m3, rc_sc2, 0xFFFFFFFF);
-
-
+	EndBatchDrawing();
 
 	return true;
 

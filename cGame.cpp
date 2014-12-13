@@ -190,23 +190,6 @@ void cGame::ProcessOrder()
 
 	Keyboard = Input.GetKeyboard();
 
-
-	/*	if (Keyboard->KeyDown(DIK_LEFT)){
-	int x, y;
-	Player.GetGlobalPosition(&x,&y);
-	Player.SetGlobalPosition(x-1,y);
-	Player.GetLocalPosition(&x, &y);
-	Player.SetLocalPosition(x-1, y);
-
-	}
-	if (Keyboard->KeyDown(DIK_RIGHT)){
-	int x, y;
-	Player.GetGlobalPosition(&x, &y);
-	Player.SetGlobalPosition(x + 1, y);
-	Player.GetLocalPosition(&x, &y);
-	Player.SetLocalPosition(x + 1, y);
-
-	}*/
 	if (Keyboard->KeyDown(DIK_SPACE)){
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
@@ -237,7 +220,7 @@ bool cGame::ManageGraphics()
 {
 	bool res;
 
-	res = Graphics.Render(Input.GetMouse(), &Scene, state, &Player);
+	res = Graphics.Render(Input.GetMouse(), &Scene, state, &Player, &Interface);
 
 	return res;
 }

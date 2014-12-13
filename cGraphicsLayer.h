@@ -42,8 +42,8 @@ public:
 
 	void LoadData();
 	void UnLoadData();
-	bool Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Player);
-	bool PintaScore(cScene *Scene);
+	bool Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Player,cInterface *Interface);
+	bool PintaScore(cScene *Scene, cInterface *Interface);
 	bool PintaEscena(cScene *Scene);
 	bool PintaRaton(cMouse *Mouse);
 	bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player);
