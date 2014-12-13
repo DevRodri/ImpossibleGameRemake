@@ -752,7 +752,7 @@ bool cGraphicsLayer::PintaScore(cScene *Scene, cInterface *Interface)
 		AddQuad(m1, rc_sc2, 0xFFFFFFFF);
 	}
 
-	if (TempScore > 10){
+	if (TempScore >= 10){
 
 		SetRect(&m2, 0 + (40 * Marcador2), 0, 40 + (40 * Marcador2), 50);
 		SetRect(&rc_sc2, SCORE_X + 20 + cent, SCORE_Y, SCORE_X + 38 + cent, SCORE_Y + 28);//segon marcador
