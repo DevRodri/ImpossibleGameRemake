@@ -201,7 +201,7 @@ void cGraphicsLayer::InitRendering(int resWidth, int resHeight)
 	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-	alpha1 = 0; alpha2 = 0; alpha3 = 0;
+	alpha1 = 0; alpha2 = 0; alpha3 = 0, vuelta=0;
 }
 
 bool cGraphicsLayer::Finalize()
@@ -328,8 +328,9 @@ int cGraphicsLayer::BeginDrawing() { return g_pD3DDevice->BeginScene(); }
 int cGraphicsLayer::EndDrawing() { return g_pD3DDevice->EndScene(); }
 
 //Get ready for batch drawing
-void cGraphicsLayer::BeginBatchDrawing(IDirect3DTexture9* texture)
-{
+void cGraphicsLayer::BeginBatchDrawing(IDirect3DTexture9* texture, float rotate)
+{	
+	D3DXMATRIX matTransform;
 	D3DXMATRIX matIdentity;
 	D3DSURFACE_DESC surfDesc;
 
@@ -348,7 +349,7 @@ void cGraphicsLayer::BeginBatchDrawing(IDirect3DTexture9* texture)
 	//Set world matrix to an identity matrix
 	D3DXMatrixIdentity(&matIdentity);
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matIdentity);
-
+	
 	//Set stream source to batch buffer
 	g_pD3DDevice->SetStreamSource(0, vertexBatchBuffer, 0, sizeof(TLVERTEX));
 }
@@ -452,7 +453,7 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 	case STATE_MAIN:
 
 		//pintar pantalla principal
-		BeginBatchDrawing(texMain);
+		BeginBatchDrawing(texMain,0.0f);
 		//rectangulo de toda la pantalla
 		SetRect(&rc_o, 0, 0, 800, 600);
 		SetRect(&rc_d, 0, 0, 800, 600);
@@ -488,7 +489,7 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 	case STATE_DEATH:
 
 		//para pintar el fondo con QUADS
-		BeginBatchDrawing(texGame);
+		BeginBatchDrawing(texGame, 0.0f);
 		SetRect(&rc_o, 0, 0, 800, 600);
 		SetRect(&rc_d, 0, 0, 800, 600);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
@@ -520,7 +521,7 @@ bool cGraphicsLayer::PintaMuerte(cPlayer *Player)
 	RECT rc_d;
 
 	Player->GetLocalPosition(&px, &py);
-	BeginBatchDrawing(texDie); //texturaMuerte
+	BeginBatchDrawing(texDie, 0.0f); //texturaMuerte
 	SetRect(&rc_o, seq * 64, 0, 64 + seq * 64, 64);
 	SetRect(&rc_d, px - 16, py - 16, px + 48, py + 48);
 	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
@@ -589,7 +590,7 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 			if ((temp_i == 3) || (temp_i == 22)) { AplicaAlpha(150); }
 			if ((temp_i == 4) || (temp_i == 21)) { AplicaAlpha(200); }
 
-			BeginBatchDrawing(texTiles);
+			BeginBatchDrawing(texTiles, 0.0f);
 			SetRect(&rc_o, n << 5, 0, (n + 1) << 5, 32);
 			SetRect(&rc_d, pantx, panty, pantx + 32, panty + 32);
 			AddQuad(rc_o, rc_d, 0xFFFFFFFF);
@@ -610,9 +611,47 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 
 	Player->GetLocalPosition(&px, &py);
 	Player->GetTileSize(&tsize);
-	BeginBatchDrawing(texCharacters);
-	SetRect(&rc_o, 0, 0, tsize, tsize);
-	SetRect(&rc_d, px, py, px + tsize, py + tsize);
+	BeginBatchDrawing(texCharacters, 0.0f);
+
+	// hay 6 posiciones posibles y cada 32 pixeles de altura hay que hacer las 6
+	
+	// de 0 a 5 zona 6*32
+	// de 6 a 10
+	// de 11 a 16
+	// de 17 a 21
+	// de 22 a 27
+	// de 28 a 31
+	
+	//32 = 90 grados
+	int temp = py % tsize;
+	
+	if ((temp == 0))	{ SetRect(&rc_o, 240, 32, 288, 80); vuelta = 0;}
+	else
+	{
+		if (vuelta == 5){ SetRect(&rc_o, 192, 32, 240, 80); vuelta = 0; }
+		if (vuelta == 4){ SetRect(&rc_o, 144, 32, 192, 80); vuelta++; }
+		if (vuelta == 3){ SetRect(&rc_o, 96, 32, 144, 80); vuelta++; }
+		if (vuelta == 2){ SetRect(&rc_o, 48, 32, 96, 80); vuelta++; }
+		if (vuelta == 1){ SetRect(&rc_o, 0, 32, 48, 80); vuelta++; }
+		if (vuelta == 0){ SetRect(&rc_o, 240, 32, 288, 80); vuelta++; }
+	}
+	
+	/*if ((temp >= 6) && (temp <= 10))	SetRect(&rc_o, 0, 32, 48, 80);// de 0 a 5.3 zona 6*32
+	if ((temp >= 11) && (temp <= 16))	SetRect(&rc_o, 48, 32, 96, 80);// de 0 a 5.3 zona 6*32
+	if ((temp >= 17) && (temp <= 21))	SetRect(&rc_o, 96, 32, 144, 80);// de 0 a 5.3 zona 6*32
+	if ((temp >= 22) && (temp <= 27))	SetRect(&rc_o, 144, 32, 192, 80);// de 0 a 5.3 zona 6*32
+	if ((temp >= 28) && (temp <= 31))	SetRect(&rc_o, 192, 32, 240, 80);// de 0 a 5.3 zona 6*32
+	*/
+	/*if ((temp >= 0) && (temp <= 5))		SetRect(&rc_o, 240, 32, 288, 80);// de 0 a 5.3 zona 6*32
+	if ((temp >= 6) && (temp <= 10))	SetRect(&rc_o, 0, 32, 48, 80);// de 0 a 5.3 zona 6*32
+	if ((temp >=11) && (temp <= 16))	SetRect(&rc_o, 48, 32, 96, 80);// de 0 a 5.3 zona 6*32
+   	if ((temp >= 17) && (temp <= 21))	SetRect(&rc_o, 96, 32, 144, 80);// de 0 a 5.3 zona 6*32
+	if ((temp >= 22) && (temp <= 27))	SetRect(&rc_o, 144, 32, 192, 80);// de 0 a 5.3 zona 6*32
+	if ((temp >= 28) && (temp <= 31))	SetRect(&rc_o, 192, 32, 240, 80);// de 0 a 5.3 zona 6*32
+	*/
+
+	//SetRect(&rc_o, 0, 0, tsize, tsize);
+	SetRect(&rc_d, px-16, py-16, px + 40, py + 40);
 	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 	EndBatchDrawing();
 	//pintamos.
@@ -639,7 +678,7 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 	RECT rc_o;
 	RECT rc_d;
 
-	BeginBatchDrawing(texGame3);
+	BeginBatchDrawing(texGame3, 0.0f);
 	SetRect(&rc_o, 0, 0, 800, 600);
 	SetRect(&rc_d, 0, 0, 800, 600);
 	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
@@ -650,7 +689,7 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 		if (alpha1 > 255) alpha1 = 255;
 		AplicaAlpha(alpha1);
 
-		BeginBatchDrawing(texGame);
+		BeginBatchDrawing(texGame, 0.0f);
 		SetRect(&rc_o, 0, 0, 800, 600);
 		SetRect(&rc_d, 0, 0, 800, 600);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
@@ -664,14 +703,14 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 		alpha2 = alpha2 + 10;
 		if (alpha2 > 255) alpha2 = 255;
 
-		BeginBatchDrawing(texGame);
+		BeginBatchDrawing(texGame, 0.0f);
 		SetRect(&rc_o, 0, 0, 800, 600);
 		SetRect(&rc_d, 0, 0, 800, 600);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 		EndBatchDrawing();
 
 		AplicaAlpha(alpha2);
-		BeginBatchDrawing(texGame3);
+		BeginBatchDrawing(texGame3, 0.0f);
 		SetRect(&rc_o, 0, 0, 800, 600);
 		SetRect(&rc_d, 0, 0, 800, 600);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
@@ -688,7 +727,7 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 		if (alpha3 > 255) alpha3 = 255;
 		AplicaAlpha(alpha3);
 
-		BeginBatchDrawing(texGame2);
+		BeginBatchDrawing(texGame2, 0.0f);
 		SetRect(&rc_o, 0, 0, 800, 600);
 		SetRect(&rc_d, 0, 0, 800, 600);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);

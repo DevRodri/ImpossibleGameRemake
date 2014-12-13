@@ -57,7 +57,7 @@ public:
 	void InitRendering(int resWidth, int resHeight);
 	void SetupQuad();
 	void FillIndexBuffer();
-	void BeginBatchDrawing(IDirect3DTexture9* texture);
+	void BeginBatchDrawing(IDirect3DTexture9* texture,float rotate);
 	void AplicaAlpha(int alpha);
 	void PintaFondo(cScene *Scene);
 	//Add a quad to the batching buffer
@@ -96,7 +96,7 @@ private:
 	//Info on texture used for batched drawing
 	float batchTexWidth;
 	float batchTexHeight;
-	int alpha1, alpha2, alpha3;
+	int alpha1, alpha2, alpha3,vuelta;
 };
 
 
