@@ -97,7 +97,8 @@ private:
 	//Info on texture used for batched drawing
 	float batchTexWidth;
 	float batchTexHeight;
-	int alpha1, alpha2, alpha3,vuelta;
+	int alpha1, alpha2, alpha3;
+	float vuelta,velocidadvuelta;
 	cInterface Interface;
 };
 

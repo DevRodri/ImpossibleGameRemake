@@ -201,7 +201,7 @@ void cGraphicsLayer::InitRendering(int resWidth, int resHeight)
 	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-	alpha1 = 0; alpha2 = 0; alpha3 = 0, vuelta=0;
+	alpha1 = 0; alpha2 = 0; alpha3 = 0, vuelta=0.0f;velocidadvuelta=0.7f;
 }
 
 bool cGraphicsLayer::Finalize()
@@ -593,11 +593,11 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 
 			int temp_i;
 			temp_i = fx - x;
-			if ((temp_i <= 0) || (temp_i >= 25)) { AplicaAlpha(0); }
-			if ((temp_i == 1) || (temp_i == 24)) { AplicaAlpha(50); }
-			if ((temp_i == 2) || (temp_i == 23)) { AplicaAlpha(100); }
-			if ((temp_i == 3) || (temp_i == 22)) { AplicaAlpha(150); }
-			if ((temp_i == 4) || (temp_i == 21)) { AplicaAlpha(200); }
+			if ((temp_i <= 2) || (temp_i >= 26)) { AplicaAlpha(0); }
+			if ((temp_i == 3) || (temp_i == 25)) { AplicaAlpha(50); }
+			if ((temp_i == 4) || (temp_i == 24)) { AplicaAlpha(100); }
+			if ((temp_i == 5) || (temp_i == 23)) { AplicaAlpha(150); }
+			if ((temp_i == 6) || (temp_i == 22)) { AplicaAlpha(200); }
 
 			BeginBatchDrawing(texTiles, 0.0f);
 			SetRect(&rc_o, n << 5, 0, (n + 1) << 5, 32);
@@ -624,18 +624,18 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 
 	int temp = py % tsize;
 	
-	if ((temp == 0))	{ SetRect(&rc_o, 240, 32, 288, 80); vuelta = 0;}
+	if ((temp == 0))	{ SetRect(&rc_o, 240, 32, 288, 80); vuelta = 0.0f;}
 	else
 	{
-		if (vuelta >= 5){ SetRect(&rc_o, 192, 32, 240, 80); vuelta = 0; }
-		else if (vuelta >= 4){ SetRect(&rc_o, 144, 32, 192, 80); vuelta++; }
-		else if (vuelta >= 3){ SetRect(&rc_o, 96, 32, 144, 80); vuelta++; }
-		else if (vuelta >= 2){ SetRect(&rc_o, 48, 32, 96, 80); vuelta++; }
-		else if (vuelta >= 1){ SetRect(&rc_o, 0, 32, 48, 80); vuelta++; }
-		else if (vuelta >= 0){ SetRect(&rc_o, 240, 32, 288, 80); vuelta++; }
+		if (vuelta >= 5){ SetRect(&rc_o, 192, 32, 240, 80); vuelta = 0.0f; }
+		else if (vuelta >= 4){ SetRect(&rc_o, 144, 32, 192, 80); vuelta=vuelta+velocidadvuelta; }
+		else if (vuelta >= 3){ SetRect(&rc_o, 96, 32, 144, 80); vuelta = vuelta + velocidadvuelta; }
+		else if (vuelta >= 2){ SetRect(&rc_o, 48, 32, 96, 80); vuelta = vuelta + velocidadvuelta; }
+		else if (vuelta >= 1){ SetRect(&rc_o, 0, 32, 48, 80); vuelta = vuelta + velocidadvuelta; }
+		else if (vuelta >= 0){ SetRect(&rc_o, 240, 32, 288, 80); vuelta = vuelta + velocidadvuelta; }
 	}
 
-	SetRect(&rc_d, px-16, py-16, px + 40, py + 40);
+	SetRect(&rc_d, px-10, py-10, px + 40, py + 40);
 	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 	EndBatchDrawing();
 	//pintamos.

@@ -35,7 +35,7 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 
 	//Carga mapa lógico
 	Scene.LoadMap("map.txt");
-	Scene.SetVelocity(8.5f);
+	Scene.SetVelocity(7.5f);
 
 	//Inicializa Gravedad
 	Physics.SetGravity(1.5f);
@@ -145,7 +145,7 @@ bool cGame::ManageLogic()
 			{
 
 				state = STATE_GAME;
-				Scene.SetVelocity(8.5f);
+				//Scene.SetVelocity(7.5f);
 			}
 			//Exit button
 			else if (Mouse->In(255, 395, 410, 430))
@@ -167,12 +167,12 @@ bool cGame::ManageLogic()
 
 	case STATE_DEATH:
 
-		Scene.SetVelocity(0.0f);
+		//Scene.SetVelocity(0.0f);
 
 		Player.PlayDieAnimation();
 		if (Player.IsDeath()){
 			Interface.SumScore();
-			state = STATE_MAIN;
+			state = STATE_GAME;
 			ResetLevel();
 		}
 		break;
