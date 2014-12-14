@@ -182,7 +182,7 @@ bool cGame::ManageLogic()
 				Scene.SetLastPlayerLY(ly);
 				Scene.SetOffsetYCamera(offsetYCam + 32);
 			}
-			else if (ly > CAMERA_MAX_Y && ly != lply)
+			else if (ly > CAMERA_MIN_Y && ly != lply)
 			{
 				Scene.SetLastPlayerLY(ly);
 				Scene.SetOffsetYCamera(offsetYCam - 32);

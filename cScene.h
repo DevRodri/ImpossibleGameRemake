@@ -25,7 +25,7 @@
 
 //LIMITES VERTICALES DE LA CAMARA
 #define CAMERA_MAX_Y	256
-#define CAMERA_MIN_Y    352
+#define CAMERA_MIN_Y    416
 
 class cScene
 {
