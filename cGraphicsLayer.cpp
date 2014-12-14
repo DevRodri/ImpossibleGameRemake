@@ -571,13 +571,15 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 
 	int n,
 		fx, fy,
-		pantx, panty;
+		pantx, panty,
+		offy_cam;
 
 	//Celda inicial a pintar
 	int scenegx, scenegy;
 	int cellx;
 	int celly;
 	Scene->GetGlobalPosition(&scenegx, &scenegy);
+	Scene->GetOffsetYCamera(&offy_cam);
 
 	cellx = scenegx / 32;
 	celly = scenegy / 32;
@@ -588,7 +590,7 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 
 	for (int y = celly; y < fy; y++)
 	{
-		panty = (y - scenegy) + 31 * y;
+		panty = (y - scenegy) + 31 * y  + offy_cam;
 		for (int x = cellx; x < fx; x++)
 		{
 
@@ -626,6 +628,11 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 	Player->GetLocalPosition(&px, &py);
 	Player->GetTileSize(&tsize);
 	BeginBatchDrawing(texCharacters, 0.0f);
+
+	//AÑADO OFFSET DE CAMARA
+	int oy;
+	Scene->GetOffsetYCamera(&oy);
+	py += oy;
 
 	int temp = py % tsize;
 	float vuelta, velocidadvuelta;

@@ -45,6 +45,7 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 	//Player.SetLocalPosition(5,32);
 	//Player.SetGlobalPosition(5 * 32, SCENE_GROUND * 32);
 	Player.SetLocalPosition(5 * 32, (29 - HEIGHT_MAX_TILES + 4) * 32);
+	Scene.SetLastPlayerLY( (29 - HEIGHT_MAX_TILES + 4) * 32 );
 	Player.SetGlobalPosition(5 * 32, 29 * 32);
 	Interface.InitScore();
 
@@ -99,7 +100,7 @@ bool cGame::ManagePhysics()
 
 		//si el player no toca suelo aplicarle la gravedad, si toca suelo reseteamos la velocidad
 		//si la distancia entre la X global y el final del mapa es menor que WIDTH_MAX_TILES, no muevo mas el mapa.
-		Physics.MoveScene(&Player, &Scene);
+		//Physics.MoveScene(&Player, &Scene);
 		res = Physics.ApplyGravity(&Player, &Scene, deltaTime);
 
 		if (Physics.Is_Grounded(&Player, &Scene))
@@ -117,7 +118,9 @@ bool cGame::ManagePhysics()
 			//reiniciar el nivel
 			
 			if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ state = STATE_DEATH; }
-			if (colision == SUELO){ res = true; } // es el suelo y no cuenta.
+			if (colision == SUELO){ 
+				res = true;
+			} // es el suelo y no cuenta.
 			res = true;
 		}
 
@@ -160,6 +163,28 @@ bool cGame::ManageLogic()
 		if (Keyboard->KeyDown(DIK_ESCAPE)){
 			ResetLevel();
 			state = STATE_MAIN;
+		}
+
+		//AQUI MENEO LA CAMARA EN FUNCION DE LA POSICION DEL PERSONAJE
+		if (Physics.Is_Grounded(&Player, &Scene))
+		{
+			int lx, ly,
+				lply, offsetYCam;
+
+			Player.GetLocalPosition(&lx, &ly);
+			Scene.GetLastPlayerLY(&lply);
+			Scene.GetOffsetYCamera(&offsetYCam);
+
+			if (ly > lply) // hay que aumentar offset de camara
+			{
+				Scene.SetLastPlayerLY(ly);
+				Scene.SetOffsetYCamera(offsetYCam - 32);
+			}
+			else if (ly < lply)
+			{
+				Scene.SetLastPlayerLY(ly);
+				Scene.SetOffsetYCamera(offsetYCam + 32);
+			}
 		}
 		Scene.Changebackground(&Player);
 		ProcessOrder();
@@ -205,6 +230,23 @@ void cGame::ProcessOrder()
 			//
 
 		}
+	}
+
+	if (Keyboard->KeyDown(DIK_LEFT)){
+		//int x, y;
+		//Player.GetGlobalPosition(&x,&y);
+		//Player.SetGlobalPosition(x-1,y);
+		//Player.GetLocalPosition(&x, &y);
+		//Player.SetLocalPosition(x-1, y);
+
+	}
+	if (Keyboard->KeyDown(DIK_RIGHT)){
+		//int x, y;
+		//Player.GetGlobalPosition(&x, &y);
+		//Player.SetGlobalPosition(x + 1, y);
+		//Player.GetLocalPosition(&x, &y);
+		//Player.SetLocalPosition(x + 1, y);
+		Physics.MoveScene(&Player, &Scene);
 	}
 
 	if (Mouse->ButtonDown(LEFT))

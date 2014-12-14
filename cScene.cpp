@@ -9,6 +9,7 @@ cScene::cScene()
 	velocity = 3;
 	gx = 0;
 	gy = (29 - HEIGHT_MAX_TILES + 5) * 32;
+	oy = 32;
 }
 cScene::~cScene(){}
 
@@ -17,7 +18,8 @@ void cScene::LoadMap(char *file)
 	int i,j,n;
 	
 	FILE *f;
-	f=fopen("map.txt","r");
+	//f=fopen("map.txt","r");
+	f = fopen("map_debug.txt", "r");
 
 	for(i=0;i<SCENE_AREA_X;i++)
 	{
@@ -43,9 +45,29 @@ void cScene::SetGlobalPosition(int gpx, int gpy)
 	gy = gpy;
 }
 
+void cScene::GetLastPlayerLY(int *lply)
+{
+	*lply = lastPlayerLocalY;
+}
+
+void cScene::SetLastPlayerLY(int value)
+{
+	lastPlayerLocalY = value;
+}
+
 void cScene::CalculateCellonX(int *cell, int gpx)
 {
 	*cell = gpx / 32;
+}
+
+void cScene::GetOffsetYCamera(int *offset)
+{
+	*offset = oy;
+}
+
+void cScene::SetOffsetYCamera(int value)
+{
+	oy = value;
 }
 
 void cScene::GetVelocity(float *vel)

@@ -36,8 +36,14 @@ public:
 	void GetGlobalPosition(int *gx, int *gy);
 	void SetGlobalPosition(int gx, int gy);
 
+	void GetLastPlayerLY(int *lply);
+	void SetLastPlayerLY(int value);
+
 	void CalculateCellonX(int *cell, int gx);
 	int Changebackground(cPlayer *Player);
+
+	void GetOffsetYCamera(int *offset);
+	void SetOffsetYCamera(int value);
 
 	void GetVelocity(float *vel);
 	void SetVelocity(float vel);
@@ -49,6 +55,8 @@ public:
 private:
 
 	int gx, gy; //posicion global actual en el mapa
+	int oy; // ofset Y de la cámara.
+	int lastPlayerLocalY;
 	float velocity; //velocidad de desplazamiento del mapa
 	int fondo; // 0 fondo normal azul, 1 fundido negro, 2 fondo rojo
 

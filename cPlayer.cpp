@@ -58,10 +58,8 @@ void cPlayer::GetLocalPosition(int *posx, int *posy)
 
 void cPlayer::SetGlobalPosition(int posx, int posy)
 {
-	//TODO
 	gx = posx;
 	gy = posy;
-	//
 }
 
 void cPlayer::GetGlobalPosition(int *posx, int *posy)
