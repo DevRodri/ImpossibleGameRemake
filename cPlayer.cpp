@@ -36,6 +36,7 @@ void cPlayer::GetVuelta(float *v)
 }
 void cPlayer::SetVely(float vely)
 {
+	if (vely > 20) vely = 20;
 	velocity = vely; //velocidad del jugador en el eje Y
 }
 

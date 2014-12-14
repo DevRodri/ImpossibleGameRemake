@@ -97,7 +97,7 @@ bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 
 	if (posfy > (tsize * SCENE_GROUND)) {
 		posfy = SCENE_GROUND*tsize;
-		localy = SCENE_GROUND*tsize;
+		localy = (29 - HEIGHT_MAX_TILES + 4) * tsize;
 		Player->SetVely(0);
 	}
 
