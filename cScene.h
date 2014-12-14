@@ -2,6 +2,8 @@
 #ifndef __SCENE_H__
 #define __SCENE_H__
 
+#include "cPlayer.h"
+
 //Resolution
 #define SCREEN_RES_X	800
 #define SCREEN_RES_Y	600
@@ -35,14 +37,17 @@ public:
 	void SetGlobalPosition(int gx, int gy);
 
 	void CalculateCellonX(int *cell, int gx);
-
+	int Changebackground(cPlayer *Player);
 
 	void GetVelocity(float *vel);
 	void SetVelocity(float vel);
+	void GetFondo(int *f);
 
 	void GetMapPosition(int *val, int x, int y); //Obtiene en "val" la posicion (x,y) del mapa
-
 	int map[SCENE_AREA_X][SCENE_AREA_Y];
+
+private:
+
 	int gx, gy; //posicion global actual en el mapa
 	float velocity; //velocidad de desplazamiento del mapa
 	int fondo; // 0 fondo normal azul, 1 fundido negro, 2 fondo rojo

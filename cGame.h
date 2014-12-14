@@ -30,7 +30,6 @@ public:
 	void Finalize();
 	void ProcessOrder();
 	void ResetLevel();
-	void Changebackground(cScene *Scene);
 
 	//Clases que posee el juego
 	cGraphicsLayer Graphics;

@@ -52,6 +52,10 @@ void cScene::GetVelocity(float *vel)
 {
 	*vel = velocity;
 }
+void cScene::GetFondo(int *f)
+{
+	*f = fondo;
+}
 
 void cScene::SetVelocity(float vel)
 {
@@ -66,4 +70,23 @@ void cScene::GetMapPosition(int *val, int x, int y)
 	}
 	else //SEGMENTATION FAULT
 		*val = -1;
+}
+int cScene::Changebackground(cPlayer *Player)
+{
+	int x, y, tsize;
+	Player->GetGlobalPosition(&x, &y);
+	Player->GetTileSize(&tsize);
+	x = x / tsize;
+
+	//324 fondo negro
+	//360 fondo amarillo
+	//660 fondo negro
+	//684 fondo azul
+	fondo = 0;
+	if (x >= 324){ fondo = 1; }
+	if (x >= 360){ fondo = 2; }
+	if (x >= 660){ fondo = 1; }
+	if (x >= 684){ fondo = 0; }
+
+	return fondo;
 }

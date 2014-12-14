@@ -574,8 +574,13 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 		pantx, panty;
 
 	//Celda inicial a pintar
-	int cellx = Scene->gx / 32;
-	int celly = Scene->gy / 32;
+	int scenegx, scenegy;
+	int cellx;
+	int celly;
+	Scene->GetGlobalPosition(&scenegx, &scenegy);
+
+	cellx = scenegx / 32;
+	celly = scenegy / 32;
 
 	//Celda final a pintar
 	fx = cellx + WIDTH_MAX_TILES + 1;
@@ -583,11 +588,11 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 
 	for (int y = celly; y < fy; y++)
 	{
-		panty = (y - Scene->gy) + 31 * y;
+		panty = (y - scenegy) + 31 * y;
 		for (int x = cellx; x < fx; x++)
 		{
 
-			pantx = (x - Scene->gx) + 31 * x;
+			pantx = (x - scenegx) + 31 * x;
 
 			Scene->GetMapPosition(&n, y, x);
 
@@ -668,7 +673,10 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 	EndBatchDrawing();
 
-	if (Scene->fondo == 0){
+	int fondo;
+	Scene->GetFondo(&fondo);
+
+	if (fondo == 0){
 		alpha1 = alpha1 + 10;
 		if (alpha1 > 255) alpha1 = 255;
 		AplicaAlpha(alpha1);
@@ -682,7 +690,7 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 		alpha2 = 0;
 		alpha3 = 0;
 	}
-	if (Scene->fondo == 1){
+	if (fondo == 1){
 
 		alpha2 = alpha2 + 10;
 		if (alpha2 > 255) alpha2 = 255;
@@ -705,7 +713,7 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 		alpha3 = 0;
 
 	}
-	if (Scene->fondo == 2){
+	if (fondo == 2){
 
 		alpha3 = alpha3 + 10;
 		if (alpha3 > 255) alpha3 = 255;

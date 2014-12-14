@@ -161,7 +161,7 @@ bool cGame::ManageLogic()
 			ResetLevel();
 			state = STATE_MAIN;
 		}
-		Changebackground(&Scene);
+		Scene.Changebackground(&Player);
 		ProcessOrder();
 		break;
 
@@ -233,23 +233,7 @@ void cGame::ResetLevel()
 
 	Scene.SetGlobalPosition(0, (29 - HEIGHT_MAX_TILES + 5) * 32);
 }
-void cGame::Changebackground(cScene *Scene)
-{
-	int x, y,tsize;
-	Player.GetGlobalPosition(&x,&y);
-	Player.GetTileSize(&tsize);
-	x = x / tsize;
 
-	//324 fondo negro
-	//360 fondo amarillo
-	//660 fondo negro
-	//684 fondo azul
-	Scene->fondo = 0;
-	if (x >= 324){ Scene->fondo = 1; }
-	if (x >= 360){ Scene->fondo = 2; }
-	if (x >= 660){ Scene->fondo = 1; }
-	if (x >= 684){ Scene->fondo = 0; }
-}
 void cGame::Finalize()
 {
 	Graphics.UnLoadData();

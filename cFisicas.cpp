@@ -24,7 +24,10 @@ void cFisicas::MoveScene(cPlayer *Player, cScene *Scene)
 
 	//Movimiento en X
 	x = x + vel;
-	Scene->gx +=vel;
+	int scenegx, scenegy;
+	Scene->GetGlobalPosition(&scenegx, &scenegy);
+	Scene->SetGlobalPosition(scenegx + vel, scenegy);
+	//Scene->gx +=vel;
 
 	//Movimiento en Y ( limite superior y límite inferior )
 
