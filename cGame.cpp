@@ -100,6 +100,7 @@ bool cGame::ManagePhysics()
 
 		//si el player no toca suelo aplicarle la gravedad, si toca suelo reseteamos la velocidad
 		//si la distancia entre la X global y el final del mapa es menor que WIDTH_MAX_TILES, no muevo mas el mapa.
+
 		//Physics.MoveScene(&Player, &Scene);
 		res = Physics.ApplyGravity(&Player, &Scene, deltaTime);
 
@@ -175,15 +176,16 @@ bool cGame::ManageLogic()
 			Scene.GetLastPlayerLY(&lply);
 			Scene.GetOffsetYCamera(&offsetYCam);
 
-			if (ly > lply) // hay que aumentar offset de camara
+			if (ly < CAMERA_MAX_Y && ly != lply) // hay que aumentar offset de camara
+			{
+				//Player.SetLocalPosition(lx, ly - 32);
+				Scene.SetLastPlayerLY(ly);
+				Scene.SetOffsetYCamera(offsetYCam + 32);
+			}
+			else if (ly > CAMERA_MAX_Y && ly != lply)
 			{
 				Scene.SetLastPlayerLY(ly);
 				Scene.SetOffsetYCamera(offsetYCam - 32);
-			}
-			else if (ly < lply)
-			{
-				Scene.SetLastPlayerLY(ly);
-				Scene.SetOffsetYCamera(offsetYCam + 32);
 			}
 		}
 		Scene.Changebackground(&Player);
@@ -273,7 +275,8 @@ void cGame::ResetLevel()
 	Player.SetGlobalPosition(5 * 32, 29 * 32);
 	Player.ResetDieAnimation();
 
-	Scene.SetGlobalPosition(0, (29 - HEIGHT_MAX_TILES + 5) * 32);
+	Scene.SetGlobalPosition(0,(29 - HEIGHT_MAX_TILES + 5) * 32);
+	Scene.SetOffsetYCamera(0);
 }
 
 void cGame::Finalize()

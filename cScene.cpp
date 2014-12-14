@@ -9,7 +9,7 @@ cScene::cScene()
 	velocity = 3;
 	gx = 0;
 	gy = (29 - HEIGHT_MAX_TILES + 5) * 32;
-	oy = 32;
+	oy = 0;
 }
 cScene::~cScene(){}
 

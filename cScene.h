@@ -23,6 +23,10 @@
 //Habrá que retocarla para el tema físicas, acorde con el mapa.
 #define SCENE_GROUND	31
 
+//LIMITES VERTICALES DE LA CAMARA
+#define CAMERA_MAX_Y	256
+#define CAMERA_MIN_Y    352
+
 class cScene
 {
 
