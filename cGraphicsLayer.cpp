@@ -627,12 +627,12 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 	if ((temp == 0))	{ SetRect(&rc_o, 240, 32, 288, 80); vuelta = 0;}
 	else
 	{
-		if (vuelta == 5){ SetRect(&rc_o, 192, 32, 240, 80); vuelta = 0; }
-		if (vuelta == 4){ SetRect(&rc_o, 144, 32, 192, 80); vuelta++; }
-		if (vuelta == 3){ SetRect(&rc_o, 96, 32, 144, 80); vuelta++; }
-		if (vuelta == 2){ SetRect(&rc_o, 48, 32, 96, 80); vuelta++; }
-		if (vuelta == 1){ SetRect(&rc_o, 0, 32, 48, 80); vuelta++; }
-		if (vuelta == 0){ SetRect(&rc_o, 240, 32, 288, 80); vuelta++; }
+		if (vuelta >= 5){ SetRect(&rc_o, 192, 32, 240, 80); vuelta = 0; }
+		else if (vuelta >= 4){ SetRect(&rc_o, 144, 32, 192, 80); vuelta++; }
+		else if (vuelta >= 3){ SetRect(&rc_o, 96, 32, 144, 80); vuelta++; }
+		else if (vuelta >= 2){ SetRect(&rc_o, 48, 32, 96, 80); vuelta++; }
+		else if (vuelta >= 1){ SetRect(&rc_o, 0, 32, 48, 80); vuelta++; }
+		else if (vuelta >= 0){ SetRect(&rc_o, 240, 32, 288, 80); vuelta++; }
 	}
 
 	SetRect(&rc_d, px-16, py-16, px + 40, py + 40);
