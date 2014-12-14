@@ -201,7 +201,7 @@ void cGraphicsLayer::InitRendering(int resWidth, int resHeight)
 	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-	alpha1 = 0; alpha2 = 0; alpha3 = 0, vuelta=0.0f;velocidadvuelta=0.7f;
+	alpha1 = 0; alpha2 = 0; alpha3 = 0;
 }
 
 bool cGraphicsLayer::Finalize()
@@ -628,6 +628,9 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 	BeginBatchDrawing(texCharacters, 0.0f);
 
 	int temp = py % tsize;
+	float vuelta, velocidadvuelta;
+	Player->GetVuelta(&vuelta);
+	Player->GetVelocidadVuelta(&velocidadvuelta);
 	
 	if ((temp == 0))	{ SetRect(&rc_o, 240, 32, 288, 80); vuelta = 0.0f;}
 	else
@@ -639,6 +642,8 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 		else if (vuelta >= 1){ SetRect(&rc_o, 0, 32, 48, 80); vuelta = vuelta + velocidadvuelta; }
 		else if (vuelta >= 0){ SetRect(&rc_o, 240, 32, 288, 80); vuelta = vuelta + velocidadvuelta; }
 	}
+	Player->SetVuelta(vuelta);
+	Player->SetVelocidadVuelta(velocidadvuelta);
 
 	SetRect(&rc_d, px-10, py-10, px + 40, py + 40);
 	AddQuad(rc_o, rc_d, 0xFFFFFFFF);

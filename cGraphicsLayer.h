@@ -98,7 +98,6 @@ private:
 	float batchTexWidth;
 	float batchTexHeight;
 	int alpha1, alpha2, alpha3;
-	float vuelta,velocidadvuelta;
 	cInterface Interface;
 };
 

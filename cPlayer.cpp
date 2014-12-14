@@ -8,13 +8,32 @@ cPlayer::cPlayer()
 	death = false;
 	delay = 0;
 	seq = 0;
+	vuelta = 0.0f; 
+	velocidadvuelta = 0.7f;
 }
 
 cPlayer::~cPlayer()
 {
 
 }
+void cPlayer::SetVuelta(float v)
+{
+	vuelta = v; //velocidad del jugador en el eje Y
+}
 
+void cPlayer::GetVelocidadVuelta(float *vvuelta)
+{
+	*vvuelta = velocidadvuelta;
+}
+void cPlayer::SetVelocidadVuelta(float vvuelta)
+{
+	velocidadvuelta = vvuelta; //velocidad del jugador en el eje Y
+}
+
+void cPlayer::GetVuelta(float *v)
+{
+	*v = vuelta;
+}
 void cPlayer::SetVely(float vely)
 {
 	velocity = vely; //velocidad del jugador en el eje Y

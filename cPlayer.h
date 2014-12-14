@@ -21,6 +21,10 @@ public:
 	void GetVely(float *vely);
 	void SetTileSize(int tsize);
 	void GetTileSize(int *tsize);
+	void SetVuelta(float v);
+	void GetVuelta(float *v);
+	void SetVelocidadVuelta(float vvuelta);
+	void GetVelocidadVuelta(float *vvuelta);
 
 	void PlayDieAnimation();
 	void ResetDieAnimation();
@@ -35,6 +39,7 @@ private:
 	float velocity; //velocidad del jugador en el eje Y
 	bool death;
 	int delay, seq; //control de la animación de muerte
+	float vuelta, velocidadvuelta;
 };
 
 #endif
