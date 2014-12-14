@@ -630,9 +630,9 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 	BeginBatchDrawing(texCharacters, 0.0f);
 
 	//AÑADO OFFSET DE CAMARA
-	int oy;
-	Scene->GetOffsetYCamera(&oy);
-	py += oy;
+	//int oy;
+	//Scene->GetOffsetYCamera(&oy);
+	//py += oy;
 
 	int temp = py % tsize;
 	float vuelta, velocidadvuelta;

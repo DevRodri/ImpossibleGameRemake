@@ -181,11 +181,13 @@ bool cGame::ManageLogic()
 				//Player.SetLocalPosition(lx, ly - 32);
 				Scene.SetLastPlayerLY(ly);
 				Scene.SetOffsetYCamera(offsetYCam + 32);
+				Player.SetLocalPosition(lx, ly + 32);
 			}
 			else if (ly > CAMERA_MIN_Y && ly != lply)
 			{
 				Scene.SetLastPlayerLY(ly);
 				Scene.SetOffsetYCamera(offsetYCam - 32);
+				Player.SetLocalPosition(lx, ly - 32);
 			}
 		}
 		Scene.Changebackground(&Player);
