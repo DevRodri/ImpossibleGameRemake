@@ -12,6 +12,7 @@
 #define PINCHO	2
 #define AGUJERO	3
 #define SUELO	4
+#define FINAL	4
 
 #define CUBICO		0
 #define ESFERICO	1

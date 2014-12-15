@@ -125,6 +125,7 @@ bool cFisicas::TileColisionCubic(cScene *Scene, int posx, int posy, int *type, i
 	if ((*type) == PINCHO){ return true; }
 	if ((*type) == AGUJERO){ return true; }
 	if ((*type) == SUELO){ return true; }
+	if ((*type) == FINAL){ return false; }
 	else  { return false; }
 }
 
@@ -172,6 +173,7 @@ bool cFisicas::TileColisionSferic(cScene *Scene, int playerx, int playery, int p
 			if ((tipo) == PINCHO){ *type = PINCHO; return true; }
 			if ((tipo) == AGUJERO){ *type = AGUJERO; return true; }
 			if ((tipo) == SUELO){ *type = SUELO; return true; }
+			if ((tipo) == FINAL){ *type = FINAL; return false; }
 			else  { return false; }
 		}
 	}
