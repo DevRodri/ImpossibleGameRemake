@@ -167,10 +167,10 @@ bool cGame::ManageLogic()
 		}
 
 		//AQUI MENEO LA CAMARA EN FUNCION DE LA POSICION DEL PERSONAJE
-		if (Physics.Is_Grounded(&Player, &Scene))
-		{
-			int lx, ly,
-				lply, offsetYCam;
+		//if (Physics.Is_Grounded(&Player, &Scene))
+		//{
+		int lx, ly,
+			lply, offsetYCam;
 
 			Player.GetLocalPosition(&lx, &ly);
 			Scene.GetLastPlayerLY(&lply);
@@ -189,7 +189,7 @@ bool cGame::ManageLogic()
 				Scene.SetOffsetYCamera(offsetYCam - 32);
 				Player.SetLocalPosition(lx, ly - 32);
 			}
-		}
+		//}
 		Scene.Changebackground(&Player);
 		ProcessOrder();
 		break;

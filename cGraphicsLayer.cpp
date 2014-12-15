@@ -582,7 +582,8 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 	Scene->GetOffsetYCamera(&offy_cam);
 
 	cellx = scenegx / 32;
-	celly = scenegy / 32;
+	//celly = scenegy / 32;
+	celly = (scenegy - offy_cam) / 32;
 
 	//Celda final a pintar
 	fx = cellx + WIDTH_MAX_TILES + 1;
