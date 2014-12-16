@@ -468,6 +468,8 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		//pintamos.
 		EndBatchDrawing();
 
+		PintaRaton(Mouse);
+
 		break;
 
 	case STATE_GAME:
@@ -512,7 +514,7 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 
 	}
 
-	PintaRaton(Mouse);
+	
 
 	EndDrawing();
 	Present();
