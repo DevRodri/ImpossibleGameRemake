@@ -2,6 +2,7 @@
 #include "cGame.h"
 #include "cLog.h"
 #include "cKeyboard.h"
+#include "MP3.h"
 
 
 cGame::cGame() {}
@@ -9,6 +10,9 @@ cGame::~cGame(){}
 
 bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 {
+	
+	Mp3Init();
+	Mp3Load("main.mp3");
 	bool res;
 	cLog *Log = cLog::Instance();
 
@@ -35,11 +39,11 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 
 	//Carga mapa lógico
 	Scene.LoadMap("map.txt");
-	Scene.SetVelocity(7.5f);
+	Scene.SetVelocity(7.0f);
 
 	//Inicializa Gravedad
-	Physics.SetGravity(1.5f);
-
+	Physics.SetGravity(1.0f);
+	fsalt = -10.1f;
 	//Inicializa posicion del jugador
 	Player.SetTileSize(32);
 	//Player.SetLocalPosition(5,32);
@@ -47,6 +51,12 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 	Player.SetLocalPosition(5 * 32, (29 - HEIGHT_MAX_TILES + 4) * 32);
 	Scene.SetLastPlayerLY( (29 - HEIGHT_MAX_TILES + 4) * 32 );
 	Player.SetGlobalPosition(5 * 32, 29 * 32);
+	psx = 5 * 32;
+	psy = 29 * 32;
+	ssx = 0;
+	ssy = (29 - HEIGHT_MAX_TILES + 4) * 32;
+	coff = 0;
+	
 	Interface.InitScore();
 
 	return true;
@@ -101,7 +111,7 @@ bool cGame::ManagePhysics()
 		//si el player no toca suelo aplicarle la gravedad, si toca suelo reseteamos la velocidad
 		//si la distancia entre la X global y el final del mapa es menor que WIDTH_MAX_TILES, no muevo mas el mapa.
 
-		//Physics.MoveScene(&Player, &Scene);
+		Physics.MoveScene(&Player, &Scene);
 		res = Physics.ApplyGravity(&Player, &Scene, deltaTime);
 
 		if (Physics.Is_Grounded(&Player, &Scene))
@@ -118,7 +128,14 @@ bool cGame::ManagePhysics()
 			//incrementar el contador de intentos
 			//reiniciar el nivel
 			
-			if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ state = STATE_DEATH; }
+			if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ 
+				
+				Mp3Stop();
+				Mp3Load("death.mp3");
+				Mp3Play();
+				state = STATE_DEATH; 
+			
+			}
 			if (colision == SUELO){ 
 				res = true;
 			} // es el suelo y no cuenta.
@@ -142,18 +159,30 @@ bool cGame::ManageLogic()
 	{
 	case STATE_MAIN:
 
+		Mp3Play();
 		if (Mouse->ButtonDown(LEFT))
 		{
 			//Play button
-			if (Mouse->In(256, 315, 430, 350))
+			if (Mouse->In(417, 293, 700, 393))
 			{
 
+				Mp3Stop();
+				Mp3Load("button1.mp3");
+				Mp3Play();
+				Sleep(250);
 				state = STATE_GAME;
+				Mp3Stop();
+				Mp3Load("level3.mp3");
+				Mp3Play();
 				//Scene.SetVelocity(7.5f);
 			}
 			//Exit button
-			else if (Mouse->In(255, 395, 410, 430))
+			else if (Mouse->In(465, 448, 669, 525))
 			{
+				Mp3Stop();
+				Mp3Load("button1.mp3");
+				Mp3Play();
+				Sleep(300);
 				return false;
 			}
 		}
@@ -162,6 +191,8 @@ bool cGame::ManageLogic()
 	case STATE_GAME:
 
 		if (Keyboard->KeyDown(DIK_ESCAPE)){
+			Mp3Stop();
+			Mp3Load("main.mp3");
 			ResetLevel();
 			state = STATE_MAIN;
 		}
@@ -202,7 +233,14 @@ bool cGame::ManageLogic()
 		if (Player.IsDeath()){
 			Interface.SumScore();
 			state = STATE_GAME;
-			ResetLevel();
+			//si hay punto de guardado lo restauramos , sino reseteamos el level;
+			if (Scene.ck.HayCheckPoint()) ResetSaveLevel();
+			else {
+				Mp3Load("level3.mp3");
+				Mp3Play();
+				ResetLevel();
+
+			}
 		}
 		break;
 	}
@@ -219,10 +257,11 @@ void cGame::ProcessOrder()
 
 	Keyboard = Input.GetKeyboard();
 
+	//Salto con teclado
 	if (Keyboard->KeyDown(DIK_SPACE)){
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
-			Player.SetVely(-15.5f);
+			Player.SetVely(fsalt);
 			//segun el juego original el salto de largo es de 4 espacios
 			//|X|_|_|_|_|X|
 			// de alto salta exactamente 1.5 de su altura
@@ -236,29 +275,18 @@ void cGame::ProcessOrder()
 		}
 	}
 
-	if (Keyboard->KeyDown(DIK_LEFT)){
-		//int x, y;
-		//Player.GetGlobalPosition(&x,&y);
-		//Player.SetGlobalPosition(x-1,y);
-		//Player.GetLocalPosition(&x, &y);
-		//Player.SetLocalPosition(x-1, y);
-
-	}
-	if (Keyboard->KeyDown(DIK_RIGHT)){
-		//int x, y;
-		//Player.GetGlobalPosition(&x, &y);
-		//Player.SetGlobalPosition(x + 1, y);
-		//Player.GetLocalPosition(&x, &y);
-		//Player.SetLocalPosition(x + 1, y);
-		Physics.MoveScene(&Player, &Scene);
-	}
-
+	//Salto con raton
 	if (Mouse->ButtonDown(LEFT))
 	{
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
-			Player.SetVely(-15.5f);
+			Player.SetVely(fsalt);
 		}
+	}
+	if (Keyboard->KeyDown(DIK_C)){
+		double tcancion;
+		tcancion=GetPosition();
+		Scene.SaveCheckPoint(&Player,tcancion);	
 	}
 }
 
@@ -279,6 +307,17 @@ void cGame::ResetLevel()
 
 	Scene.SetGlobalPosition(0,(29 - HEIGHT_MAX_TILES + 5) * 32);
 	Scene.SetOffsetYCamera(0);
+	Scene.ck.checkpoint=false;
+
+}
+void cGame::ResetSaveLevel()
+{
+	Mp3Load("level3.mp3");
+	SetPosition(Scene.ck.tiempocancion);
+	Mp3Play();
+	Player.ResetDieAnimation();
+	Scene.RestoreCheckPoint(&Player);
+
 }
 
 void cGame::Finalize()

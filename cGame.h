@@ -30,6 +30,7 @@ public:
 	void Finalize();
 	void ProcessOrder();
 	void ResetLevel();
+	void ResetSaveLevel();
 
 	//Clases que posee el juego
 	cGraphicsLayer Graphics;
@@ -39,6 +40,8 @@ public:
 	cFisicas Physics;
 	cInterface Interface;
 
+	int psx, psy, ssx, ssy, coff;
+	float fsalt;
 	float deltaTime;
 
 	int state;
