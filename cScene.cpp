@@ -18,8 +18,8 @@ void cScene::LoadMap(char *file)
 	int i,j,n;
 	
 	FILE *f;
-	//f=fopen("map.txt","r");
-	f = fopen("map_debug.txt", "r");
+	f=fopen("map.txt","r");
+	//f = fopen("map_debug.txt", "r");
 
 	for(i=0;i<SCENE_AREA_X;i++)
 	{

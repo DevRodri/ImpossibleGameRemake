@@ -35,10 +35,10 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 
 	//Carga mapa lógico
 	Scene.LoadMap("map.txt");
-	Scene.SetVelocity(7.5f);
+	Scene.SetVelocity(7.0f);
 
 	//Inicializa Gravedad
-	Physics.SetGravity(1.5f);
+	Physics.SetGravity(1.2f);
 
 	//Inicializa posicion del jugador
 	Player.SetTileSize(32);
@@ -101,7 +101,7 @@ bool cGame::ManagePhysics()
 		//si el player no toca suelo aplicarle la gravedad, si toca suelo reseteamos la velocidad
 		//si la distancia entre la X global y el final del mapa es menor que WIDTH_MAX_TILES, no muevo mas el mapa.
 
-		//Physics.MoveScene(&Player, &Scene);
+		Physics.MoveScene(&Player, &Scene);
 		res = Physics.ApplyGravity(&Player, &Scene, deltaTime);
 
 		if (Physics.Is_Grounded(&Player, &Scene))
@@ -145,14 +145,14 @@ bool cGame::ManageLogic()
 		if (Mouse->ButtonDown(LEFT))
 		{
 			//Play button
-			if (Mouse->In(256, 315, 430, 350))
+			if (Mouse->In(417, 293, 700, 393))
 			{
 
 				state = STATE_GAME;
 				//Scene.SetVelocity(7.5f);
 			}
 			//Exit button
-			else if (Mouse->In(255, 395, 410, 430))
+			else if (Mouse->In(465, 448, 669, 525))
 			{
 				return false;
 			}
@@ -219,10 +219,11 @@ void cGame::ProcessOrder()
 
 	Keyboard = Input.GetKeyboard();
 
+	//Salto con teclado
 	if (Keyboard->KeyDown(DIK_SPACE)){
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
-			Player.SetVely(-15.5f);
+			Player.SetVely(-12.0f);
 			//segun el juego original el salto de largo es de 4 espacios
 			//|X|_|_|_|_|X|
 			// de alto salta exactamente 1.5 de su altura
@@ -236,28 +237,12 @@ void cGame::ProcessOrder()
 		}
 	}
 
-	if (Keyboard->KeyDown(DIK_LEFT)){
-		//int x, y;
-		//Player.GetGlobalPosition(&x,&y);
-		//Player.SetGlobalPosition(x-1,y);
-		//Player.GetLocalPosition(&x, &y);
-		//Player.SetLocalPosition(x-1, y);
-
-	}
-	if (Keyboard->KeyDown(DIK_RIGHT)){
-		//int x, y;
-		//Player.GetGlobalPosition(&x, &y);
-		//Player.SetGlobalPosition(x + 1, y);
-		//Player.GetLocalPosition(&x, &y);
-		//Player.SetLocalPosition(x + 1, y);
-		Physics.MoveScene(&Player, &Scene);
-	}
-
+	//Salto con raton
 	if (Mouse->ButtonDown(LEFT))
 	{
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
-			Player.SetVely(-15.5f);
+			Player.SetVely(-12.0f);
 		}
 	}
 }
