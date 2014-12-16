@@ -10,6 +10,10 @@ cPlayer::cPlayer()
 	seq = 0;
 	vuelta = 0.0f; 
 	velocidadvuelta = 0.7f;
+	banderalx = 0;
+	banderaly = 0;
+	banderagx = 0;  
+	banderagy = 0;
 }
 
 cPlayer::~cPlayer()
@@ -77,6 +81,27 @@ void cPlayer::GetTileSize(int *tsize)
 	*tsize = tileSize;
 }
 
+
+void cPlayer::SetLocalBandera(int x,int y)
+{
+	banderalx = x; 
+	banderaly = y;
+}
+void cPlayer::GetLocalBandera(int* x, int *y)
+{
+	*x = banderalx;
+	*y = banderaly;
+}
+void cPlayer::SetGlobalBandera(int x, int y)
+{
+	banderagx = x;
+	banderagy = y;
+}
+void cPlayer::GetGlobalBandera(int *x, int *y)
+{
+	*x = banderagx;
+	*y = banderagy;
+}
 void cPlayer::PlayDieAnimation()
 {
 	delay++;

@@ -49,6 +49,7 @@ public:
 	bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player);
 	bool DrawRect(RECT rc, D3DCOLOR color);
 	bool PintaMuerte(cPlayer *Player);
+	bool PintaBandera(cPlayer *Player);
 
 	IDirect3DTexture9 *LoadTexture(char *fileName, D3DCOLOR colorkey);
 	int ClearBuffer();
@@ -65,6 +66,7 @@ public:
 	void AddQuad(RECT rSource, RECT rDest, D3DCOLOR colour);
 	//End batched drawing (put all quads in the buffer on screen)
 	void EndBatchDrawing();
+
 
 private:
 

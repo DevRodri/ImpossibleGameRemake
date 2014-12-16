@@ -494,6 +494,7 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		PintaPlayer(Scene, Player);
 		//Score
 		PintaScore(Scene, Interface);
+		PintaBandera(Player);
 		break;
 
 	case STATE_DEATH:
@@ -507,11 +508,12 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 
 		//pintar escena
 		PintaEscena(Scene);
-
+		//
+		PintaScore(Scene, Interface);
 		//pintar animacion de muerte
 		PintaMuerte(Player);
-
-
+		PintaBandera(Player);
+		
 	}
 
 	
@@ -789,4 +791,30 @@ bool cGraphicsLayer::PintaScore(cScene *Scene, cInterface *Interface)
 
 	return true;
 
+}
+bool cGraphicsLayer::PintaBandera(cPlayer *Player)
+{
+	int px, py, tsize,blx,bly,bgx,bgy;
+
+	RECT rc_o;
+	RECT rc_d;
+
+	Player->GetGlobalPosition(&px, &py);
+	Player->GetTileSize(&tsize);
+	Player->GetLocalBandera(&blx, &bly);
+	Player->GetGlobalBandera(&bgx,&bgy);
+	
+	//pintamos si esta en pantalla, esta en pantalla si la resta de la posicion x del player y la de la bandera de menos de 5*32 que es el espacio que hay hasta el final.
+	if ((px-bgx<5*32) && (bgx!=0))
+	{
+		BeginBatchDrawing(texCharacters, 0.0f);
+		SetRect(&rc_o, 0, 0, 32, 32);
+		SetRect(&rc_d, 5 * 32 + bgx - px, bly, 5 * 32+bgx - px + 32, bly + 32);
+		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+
+		EndBatchDrawing();
+
+	}
+	
+	return true;
 }
