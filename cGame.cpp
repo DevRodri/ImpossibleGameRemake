@@ -38,8 +38,8 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 	Scene.SetVelocity(7.0f);
 
 	//Inicializa Gravedad
-	Physics.SetGravity(1.2f);
-
+	Physics.SetGravity(1.0f);
+	fsalt = -10.1f;
 	//Inicializa posicion del jugador
 	Player.SetTileSize(32);
 	//Player.SetLocalPosition(5,32);
@@ -52,7 +52,7 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 	ssx = 0;
 	ssy = (29 - HEIGHT_MAX_TILES + 4) * 32;
 	coff = 0;
-	fsalt = -12.5f;
+	
 	Interface.InitScore();
 
 	return true;

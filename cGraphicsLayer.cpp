@@ -600,24 +600,25 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 		{
 
 			pantx = (x - scenegx) + 31 * x;
-
 			Scene->GetMapPosition(&n, y, x);
 
-			int temp_i;
-			temp_i = fx - x;
-			if ((temp_i <= 2) || (temp_i >= 26)) { AplicaAlpha(0); }
-			if ((temp_i == 3) || (temp_i == 25)) { AplicaAlpha(50); }
-			if ((temp_i == 4) || (temp_i == 24)) { AplicaAlpha(100); }
-			if ((temp_i == 5) || (temp_i == 23)) { AplicaAlpha(150); }
-			if ((temp_i == 6) || (temp_i == 22)) { AplicaAlpha(200); }
+  			if (y >= 0) {
+				int temp_i;
+				temp_i = fx - x;
+				if ((temp_i <= 2) || (temp_i >= 26)) { AplicaAlpha(0); }
+				if ((temp_i == 3) || (temp_i == 25)) { AplicaAlpha(50); }
+				if ((temp_i == 4) || (temp_i == 24)) { AplicaAlpha(100); }
+				if ((temp_i == 5) || (temp_i == 23)) { AplicaAlpha(150); }
+				if ((temp_i == 6) || (temp_i == 22)) { AplicaAlpha(200); }
 
-			BeginBatchDrawing(texTiles, 0.0f);
-			SetRect(&rc_o, n << 5, 0, (n + 1) << 5, 32);
-			SetRect(&rc_d, pantx, panty, pantx + 32, panty + 32);
-			AddQuad(rc_o, rc_d, 0xFFFFFFFF);
-			EndBatchDrawing();
-
-			AplicaAlpha(255);
+				BeginBatchDrawing(texTiles, 0.0f);
+				SetRect(&rc_o, n << 5, 0, (n + 1) << 5, 32);
+				SetRect(&rc_d, pantx, panty, pantx + 32, panty + 32);
+				AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+				EndBatchDrawing();
+ 
+				AplicaAlpha(255);
+			}
 		}
 	}
 	return true;
