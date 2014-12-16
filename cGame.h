@@ -40,7 +40,7 @@ public:
 	cFisicas Physics;
 	cInterface Interface;
 
-	int psx, psy,pslx,psly, ssx, ssy, coff;
+	int psx, psy, ssx, ssy, coff;
 
 	float deltaTime;
 

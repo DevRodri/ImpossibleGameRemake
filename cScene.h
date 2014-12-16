@@ -3,6 +3,7 @@
 #define __SCENE_H__
 
 #include "cPlayer.h"
+#include "cCheckPoint.h"
 
 //Resolution
 #define SCREEN_RES_X	800
@@ -52,9 +53,12 @@ public:
 	void GetVelocity(float *vel);
 	void SetVelocity(float vel);
 	void GetFondo(int *f);
+	void SaveCheckPoint(cPlayer *Player);
+	void RestoreCheckPoint(cPlayer *Player);
 
 	void GetMapPosition(int *val, int x, int y); //Obtiene en "val" la posicion (x,y) del mapa
 	int map[SCENE_AREA_X][SCENE_AREA_Y];
+	cCheckPoint ck;
 
 private:
 
@@ -63,6 +67,7 @@ private:
 	int lastPlayerLocalY;
 	float velocity; //velocidad de desplazamiento del mapa
 	int fondo; // 0 fondo normal azul, 1 fundido negro, 2 fondo rojo
+	
 
 };
 

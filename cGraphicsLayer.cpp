@@ -494,7 +494,7 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		PintaPlayer(Scene, Player);
 		//Score
 		PintaScore(Scene, Interface);
-		PintaBandera(Player);
+		PintaCheckPoint(Scene,Player);
 		break;
 
 	case STATE_DEATH:
@@ -512,7 +512,7 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		PintaScore(Scene, Interface);
 		//pintar animacion de muerte
 		PintaMuerte(Player);
-		PintaBandera(Player);
+		PintaCheckPoint(Scene,Player);
 		
 	}
 
@@ -792,24 +792,24 @@ bool cGraphicsLayer::PintaScore(cScene *Scene, cInterface *Interface)
 	return true;
 
 }
-bool cGraphicsLayer::PintaBandera(cPlayer *Player)
+bool cGraphicsLayer::PintaCheckPoint(cScene *cScene,cPlayer *Player)
 {
-	int px, py, tsize,blx,bly,bgx,bgy;
+	int px, py, tsize,cpgx,cpgy,cplx,cply;
 
 	RECT rc_o;
 	RECT rc_d;
 
-	Player->GetGlobalPosition(&px, &py);
-	Player->GetTileSize(&tsize);
-	Player->GetLocalBandera(&blx, &bly);
-	Player->GetGlobalBandera(&bgx,&bgy);
+	cScene->ck.GetGlobalCPoint(&cpgx, &cpgy);
+	cScene->ck.GetLocalCPoint(&cplx, &cply);
+
+	Player->GetGlobalPosition(&px,&py);
 	
 	//pintamos si esta en pantalla, esta en pantalla si la resta de la posicion x del player y la de la bandera de menos de 5*32 que es el espacio que hay hasta el final.
-	if ((px-bgx<5*32) && (bgx!=0))
+	if ((px - cpgx<5 * 32) && (cpgx != 0))
 	{
 		BeginBatchDrawing(texCharacters, 0.0f);
 		SetRect(&rc_o, 0, 0, 32, 32);
-		SetRect(&rc_d, 5 * 32 + bgx - px, bly, 5 * 32+bgx - px + 32, bly + 32);
+		SetRect(&rc_d, 5 * 32 + cpgx - px, cply, 5 * 32 + cpgx - px + 32, cply + 32); //aqui hay un pequeño error al pintar en las y's globales.
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 
 		EndBatchDrawing();

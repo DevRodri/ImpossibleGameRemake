@@ -25,10 +25,6 @@ public:
 	void GetVuelta(float *v);
 	void SetVelocidadVuelta(float vvuelta);
 	void GetVelocidadVuelta(float *vvuelta);
-	void SetLocalBandera(int x, int y);
-	void GetLocalBandera(int* x, int *y);
-	void SetGlobalBandera(int x, int y);
-	void GetGlobalBandera(int *x, int *y);
 	void PlayDieAnimation();
 	void ResetDieAnimation();
 	void GetDieAnimationSeq(int *seq);
@@ -43,8 +39,7 @@ private:
 	bool death;
 	int delay, seq; //control de la animación de muerte
 	float vuelta, velocidadvuelta;
-	int banderalx, banderaly;
-	int banderagx, banderagy;
+
 };
 
 #endif

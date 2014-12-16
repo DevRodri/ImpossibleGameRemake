@@ -49,7 +49,7 @@ public:
 	bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player);
 	bool DrawRect(RECT rc, D3DCOLOR color);
 	bool PintaMuerte(cPlayer *Player);
-	bool PintaBandera(cPlayer *Player);
+	bool PintaCheckPoint(cScene *Scene,cPlayer *Player);
 
 	IDirect3DTexture9 *LoadTexture(char *fileName, D3DCOLOR colorkey);
 	int ClearBuffer();

@@ -49,8 +49,6 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 	Player.SetGlobalPosition(5 * 32, 29 * 32);
 	psx = 5 * 32;
 	psy = 29 * 32;
-	pslx = 5 * 32;
-	psly = (29 - HEIGHT_MAX_TILES + 4) * 32;
 	ssx = 0;
 	ssy = (29 - HEIGHT_MAX_TILES + 4) * 32;
 	coff = 0;
@@ -253,14 +251,7 @@ void cGame::ProcessOrder()
 		}
 	}
 	if (Keyboard->KeyDown(DIK_C)){
-		//psx, psy, ssx, ssy, coff,pslx,psly;
-		Player.GetLocalPosition(&pslx, &psly);
-		Player.GetGlobalPosition(&psx, &psy);
-		Scene.GetGlobalPosition(&ssx,&ssy);
-		Scene.GetOffsetYCamera(&coff);
-		// y me pintas una banderita
-		Player.SetLocalBandera(pslx, psly);
-		Player.SetGlobalBandera(psx, psy);
+		Scene.SaveCheckPoint(&Player);	
 	}
 }
 
@@ -285,12 +276,9 @@ void cGame::ResetLevel()
 }
 void cGame::ResetSaveLevel()
 {
-	Player.SetLocalPosition(pslx, psly);
-	Player.SetGlobalPosition(psx, psy);
 	Player.ResetDieAnimation();
+	Scene.RestoreCheckPoint(&Player);
 
-	Scene.SetGlobalPosition(ssx, ssy);
-	Scene.SetOffsetYCamera(coff);
 }
 
 void cGame::Finalize()

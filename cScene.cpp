@@ -112,3 +112,38 @@ int cScene::Changebackground(cPlayer *Player)
 
 	return fondo;
 }
+
+void cScene::SaveCheckPoint(cPlayer *Player)
+{
+	//psx, psy, ssx, ssy, coff,pslx,psly;
+	float vely;
+	int psx, psy, pslx, psly;
+
+	Player->GetGlobalPosition(&psx, &psy);
+	Player->GetLocalPosition(&pslx, &psly);
+	Player->GetVely(&vely);
+	
+	ck.SetSceneCPoint(gx,gy);
+	ck.SetGlobalCPoint(psx, psy);
+	ck.SetLocalCPoint(pslx, psly);
+	ck.SetVelCPoint(vely);
+	ck.SetCameraoff(oy);
+
+}
+void cScene::RestoreCheckPoint(cPlayer *Player)
+{
+	float vely;
+	int psx, psy, pslx, psly;
+	
+	ck.GetGlobalCPoint(&psx, &psy);
+	ck.GetLocalCPoint(&pslx, &psly);
+	ck.GetVelCPoint(&vely);
+	
+	ck.GetSceneCPoint(&gx, &gy);
+	ck.GetCameraoff(&oy);
+
+	Player->SetGlobalPosition(psx, psy);
+	Player->SetLocalPosition(pslx, psly);
+	Player->SetVely(vely);
+}
+
