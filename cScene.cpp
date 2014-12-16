@@ -18,8 +18,8 @@ void cScene::LoadMap(char *file)
 	int i,j,n;
 	
 	FILE *f;
-	f=fopen("map.txt","r");
-	//f = fopen("map_debug.txt", "r");
+	//f=fopen("map.txt","r");
+	f = fopen("map_debug.txt", "r");
 
 	for(i=0;i<SCENE_AREA_X;i++)
 	{
@@ -105,47 +105,10 @@ int cScene::Changebackground(cPlayer *Player)
 	//660 fondo negro
 	//684 fondo azul
 	fondo = 0;
-	if (x >= 360){ fondo = 1; }
-	if (x >= 388){ fondo = 2; }
-	if (x >= 734){ fondo = 1; }
-	if (x >= 750){ fondo = 0; }
+	if (x >= 324){ fondo = 1; }
+	if (x >= 360){ fondo = 2; }
+	if (x >= 660){ fondo = 1; }
+	if (x >= 684){ fondo = 0; }
 
 	return fondo;
 }
-
-void cScene::SaveCheckPoint(cPlayer *Player,double tcancion)
-{
-	//psx, psy, ssx, ssy, coff,pslx,psly;
-	float vely;
-	int psx, psy, pslx, psly;
-
-	Player->GetGlobalPosition(&psx, &psy);
-	Player->GetLocalPosition(&pslx, &psly);
-	Player->GetVely(&vely);
-	
-	ck.SetSceneCPoint(gx,gy);
-	ck.SetGlobalCPoint(psx, psy);
-	ck.SetLocalCPoint(pslx, psly);
-	ck.SetVelCPoint(vely);
-	ck.SetCameraoff(oy);
-	ck.tiempocancion=tcancion;
-
-}
-void cScene::RestoreCheckPoint(cPlayer *Player)
-{
-	float vely;
-	int psx, psy, pslx, psly;
-	
-	ck.GetGlobalCPoint(&psx, &psy);
-	ck.GetLocalCPoint(&pslx, &psly);
-	ck.GetVelCPoint(&vely);
-	
-	ck.GetSceneCPoint(&gx, &gy);
-	ck.GetCameraoff(&oy);
-
-	Player->SetGlobalPosition(psx, psy);
-	Player->SetLocalPosition(pslx, psly);
-	Player->SetVely(vely);
-
-}
-

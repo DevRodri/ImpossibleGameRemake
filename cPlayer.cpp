@@ -76,6 +76,7 @@ void cPlayer::GetTileSize(int *tsize)
 {
 	*tsize = tileSize;
 }
+
 void cPlayer::PlayDieAnimation()
 {
 	delay++;

@@ -468,8 +468,6 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		//pintamos.
 		EndBatchDrawing();
 
-		PintaRaton(Mouse);
-
 		break;
 
 	case STATE_GAME:
@@ -494,7 +492,6 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		PintaPlayer(Scene, Player);
 		//Score
 		PintaScore(Scene, Interface);
-		PintaCheckPoint(Scene,Player);
 		break;
 
 	case STATE_DEATH:
@@ -508,15 +505,14 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 
 		//pintar escena
 		PintaEscena(Scene);
-		//
-		PintaScore(Scene, Interface);
+
 		//pintar animacion de muerte
 		PintaMuerte(Player);
-		PintaCheckPoint(Scene,Player);
-		
+
+
 	}
 
-	
+	PintaRaton(Mouse);
 
 	EndDrawing();
 	Present();
@@ -600,25 +596,24 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 		{
 
 			pantx = (x - scenegx) + 31 * x;
+
 			Scene->GetMapPosition(&n, y, x);
 
-  			if (y >= 0) {
-				int temp_i;
-				temp_i = fx - x;
-				if ((temp_i <= 2) || (temp_i >= 26)) { AplicaAlpha(0); }
-				if ((temp_i == 3) || (temp_i == 25)) { AplicaAlpha(50); }
-				if ((temp_i == 4) || (temp_i == 24)) { AplicaAlpha(100); }
-				if ((temp_i == 5) || (temp_i == 23)) { AplicaAlpha(150); }
-				if ((temp_i == 6) || (temp_i == 22)) { AplicaAlpha(200); }
+			int temp_i;
+			temp_i = fx - x;
+			if ((temp_i <= 2) || (temp_i >= 26)) { AplicaAlpha(0); }
+			if ((temp_i == 3) || (temp_i == 25)) { AplicaAlpha(50); }
+			if ((temp_i == 4) || (temp_i == 24)) { AplicaAlpha(100); }
+			if ((temp_i == 5) || (temp_i == 23)) { AplicaAlpha(150); }
+			if ((temp_i == 6) || (temp_i == 22)) { AplicaAlpha(200); }
 
-				BeginBatchDrawing(texTiles, 0.0f);
-				SetRect(&rc_o, n << 5, 0, (n + 1) << 5, 32);
-				SetRect(&rc_d, pantx, panty, pantx + 32, panty + 32);
-				AddQuad(rc_o, rc_d, 0xFFFFFFFF);
-				EndBatchDrawing();
- 
-				AplicaAlpha(255);
-			}
+			BeginBatchDrawing(texTiles, 0.0f);
+			SetRect(&rc_o, n << 5, 0, (n + 1) << 5, 32);
+			SetRect(&rc_d, pantx, panty, pantx + 32, panty + 32);
+			AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+			EndBatchDrawing();
+
+			AplicaAlpha(255);
 		}
 	}
 	return true;
@@ -792,30 +787,4 @@ bool cGraphicsLayer::PintaScore(cScene *Scene, cInterface *Interface)
 
 	return true;
 
-}
-bool cGraphicsLayer::PintaCheckPoint(cScene *cScene,cPlayer *Player)
-{
-	int px, py, tsize,cpgx,cpgy,cplx,cply;
-
-	RECT rc_o;
-	RECT rc_d;
-
-	cScene->ck.GetGlobalCPoint(&cpgx, &cpgy);
-	cScene->ck.GetLocalCPoint(&cplx, &cply);
-
-	Player->GetGlobalPosition(&px,&py);
-	
-	//pintamos si esta en pantalla, esta en pantalla si la resta de la posicion x del player y la de la bandera de menos de 5*32 que es el espacio que hay hasta el final.
-	if ((px - cpgx<5 * 32) && (cpgx != 0))
-	{
-		BeginBatchDrawing(texCharacters, 0.0f);
-		SetRect(&rc_o, 0, 0, 32, 32);
-		SetRect(&rc_d, 5 * 32 + cpgx - px, cply, 5 * 32 + cpgx - px + 32, cply + 32); //aqui hay un pequeño error al pintar en las y's globales.
-		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
-
-		EndBatchDrawing();
-
-	}
-	
-	return true;
 }
