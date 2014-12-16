@@ -14,10 +14,16 @@ cCheckPoint::cCheckPoint()
 
 cCheckPoint::~cCheckPoint()
 {
+	checkpoint = false;
+}
+bool cCheckPoint::HayCheckPoint()
+{
+	return checkpoint;
 }
 void cCheckPoint::SetCameraoff(int camoff)
 {
 	coff = camoff;
+	checkpoint = true;
 }
 void cCheckPoint::GetCameraoff(int *camoff)
 {
@@ -26,6 +32,7 @@ void cCheckPoint::GetCameraoff(int *camoff)
 void cCheckPoint::SetVelCPoint(float vely)
 {
 	velocidadCPoint = vely;
+	checkpoint = true;
 }
 void cCheckPoint::GetVelCPoint(float *vely)
 {
@@ -35,6 +42,7 @@ void cCheckPoint::SetSceneCPoint(int x, int y)
 {
 	scenex = x;
 	sceney = y;
+	checkpoint = true;
 }
 void cCheckPoint::GetSceneCPoint(int *x, int *y)
 {
@@ -45,6 +53,7 @@ void cCheckPoint::SetGlobalCPoint(int x, int y)
 {
 	pointgx = x;
 	pointgy = y;
+	checkpoint = true;
 }
 void cCheckPoint::GetGlobalCPoint(int *x, int *y)
 {
@@ -55,6 +64,7 @@ void cCheckPoint::SetLocalCPoint(int x, int y)
 {
 	pointlx = x;
 	pointly = y;
+	checkpoint = true;
 }
 void cCheckPoint::GetLocalCPoint(int *x, int *y)
 {

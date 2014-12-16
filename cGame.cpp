@@ -52,6 +52,7 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 	ssx = 0;
 	ssy = (29 - HEIGHT_MAX_TILES + 4) * 32;
 	coff = 0;
+	fsalt = -12.5f;
 	Interface.InitScore();
 
 	return true;
@@ -207,7 +208,9 @@ bool cGame::ManageLogic()
 		if (Player.IsDeath()){
 			Interface.SumScore();
 			state = STATE_GAME;
-			ResetSaveLevel();
+			//si hay punto de guardado lo restauramos , sino reseteamos el level;
+			if (Scene.ck.HayCheckPoint()) ResetSaveLevel();
+			else ResetLevel();
 		}
 		break;
 	}
@@ -228,7 +231,7 @@ void cGame::ProcessOrder()
 	if (Keyboard->KeyDown(DIK_SPACE)){
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
-			Player.SetVely(-12.0f);
+			Player.SetVely(fsalt);
 			//segun el juego original el salto de largo es de 4 espacios
 			//|X|_|_|_|_|X|
 			// de alto salta exactamente 1.5 de su altura
@@ -247,7 +250,7 @@ void cGame::ProcessOrder()
 	{
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
-			Player.SetVely(-12.0f);
+			Player.SetVely(fsalt);
 		}
 	}
 	if (Keyboard->KeyDown(DIK_C)){

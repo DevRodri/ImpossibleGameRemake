@@ -41,7 +41,7 @@ public:
 	cInterface Interface;
 
 	int psx, psy, ssx, ssy, coff;
-
+	float fsalt;
 	float deltaTime;
 
 	int state;

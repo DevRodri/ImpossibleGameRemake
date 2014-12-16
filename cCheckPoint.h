@@ -16,12 +16,14 @@ public:
 	void GetLocalCPoint(int *x, int *y);
 	void SetSceneCPoint(int x, int y);
 	void GetSceneCPoint(int *x, int *y);
+	bool HayCheckPoint();
 private:
 	float velocidadCPoint;
 	int pointlx, pointly;
 	int pointgx, pointgy;
 	int scenex, sceney;
 	int coff;
+	bool checkpoint;
 };
 
 #endif
