@@ -82,7 +82,12 @@ bool cGame::Loop()
 	res = ManageGraphics();
 	if (!res) return false;
 
-	//deltaTime = GetTickCount() - deltaTime;
+
+	lastCounts = actCounts;
+
+	do {
+		actCounts = GetTickCount();
+	} while (actCounts - lastCounts < 100 / 7);
 
 	return true;
 }
@@ -207,18 +212,17 @@ bool cGame::ManageLogic()
 			Scene.GetLastPlayerLY(&lply);
 			Scene.GetOffsetYCamera(&offsetYCam);
 
-			if (ly < CAMERA_MAX_Y && ly != lply) // hay que aumentar offset de camara
+			if (ly < CAMERA_MAX_Y) // hay que aumentar offset de camara
 			{
-				//Player.SetLocalPosition(lx, ly - 32);
-				Scene.SetLastPlayerLY(ly);
-				Scene.SetOffsetYCamera(offsetYCam + 32);
-				Player.SetLocalPosition(lx, ly + 32);
+				//Scene.SetLastPlayerLY(ly);
+				Scene.SetOffsetYCamera(offsetYCam + 16);
+				Player.SetLocalPosition(lx, ly + 16);
 			}
-			else if (ly > CAMERA_MIN_Y && ly != lply)
+			else if (ly > CAMERA_MIN_Y)
 			{
-				Scene.SetLastPlayerLY(ly);
-				Scene.SetOffsetYCamera(offsetYCam - 32);
-				Player.SetLocalPosition(lx, ly - 32);
+				//Scene.SetLastPlayerLY(ly);
+				Scene.SetOffsetYCamera(offsetYCam - 16);
+				Player.SetLocalPosition(lx, ly - 16);
 			}
 		//}
 		Scene.Changebackground(&Player);
@@ -273,6 +277,11 @@ void cGame::ProcessOrder()
 			//
 
 		}
+		
+	}
+	if (Keyboard->KeyDown(DIK_RIGHT))
+	{
+		Physics.MoveScene(&Player, &Scene);
 	}
 
 	//Salto con raton

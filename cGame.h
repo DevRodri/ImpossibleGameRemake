@@ -43,6 +43,7 @@ public:
 	int psx, psy, ssx, ssy, coff;
 	float fsalt;
 	float deltaTime;
+	DWORD lastCounts, actCounts;
 
 	int state;
 };
