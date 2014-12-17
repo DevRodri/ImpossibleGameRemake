@@ -2,7 +2,7 @@
 #include "cGame.h"
 #include "cLog.h"
 #include "cKeyboard.h"
-#include "MP3.h"
+//#include "MP3.h"
 
 
 cGame::cGame() {}
@@ -11,8 +11,8 @@ cGame::~cGame(){}
 bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 {
 	
-	Mp3Init();
-	Mp3Load("main.mp3");
+	//Mp3Init();
+	//Mp3Load("main.mp3");
 	bool res;
 	cLog *Log = cLog::Instance();
 
@@ -135,9 +135,9 @@ bool cGame::ManagePhysics()
 			
 			if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ 
 				
-				Mp3Stop();
-				Mp3Load("death.mp3");
-				Mp3Play();
+				//Mp3Stop();
+				//Mp3Load("death.mp3");
+				//Mp3Play();
 				state = STATE_DEATH; 
 			
 			}
@@ -170,28 +170,29 @@ bool cGame::ManageLogic()
 	{
 	case STATE_MAIN:
 
-		Mp3Play();
+		//Mp3Play();
 		if (Mouse->ButtonDown(LEFT))
 		{
 			//Play button
 			if (Mouse->In(417, 293, 700, 393))
 			{
 
-				Mp3Stop();
-				Mp3Load("button1.mp3");
-				Mp3Play();
+				//Mp3Stop();
+				//Mp3Load("button1.mp3");
+				//Mp3Play();
+
 				Sleep(250);
 				state = STATE_GAME;
-				Mp3Stop();
-				Mp3Load("level3.mp3");
-				Mp3Play();
+				//Mp3Stop();
+				//Mp3Load("level3.mp3");
+				//Mp3Play();
 			}
 			//Exit button
 			else if (Mouse->In(465, 448, 669, 525))
 			{
-				Mp3Stop();
-				Mp3Load("button1.mp3");
-				Mp3Play();
+				//Mp3Stop();
+				//Mp3Load("button1.mp3");
+				//Mp3Play();
 				Sleep(300);
 				return false;
 			}
@@ -201,8 +202,8 @@ bool cGame::ManageLogic()
 	case STATE_GAME:
 
 		if (Keyboard->KeyDown(DIK_ESCAPE)){
-			Mp3Stop();
-			Mp3Load("main.mp3");
+			//Mp3Stop();
+			//Mp3Load("main.mp3");
 			ResetLevel();
 			state = STATE_MAIN;
 		}
@@ -245,8 +246,8 @@ bool cGame::ManageLogic()
 			//si hay punto de guardado lo restauramos , sino reseteamos el level;
 			if (Scene.ck.HayCheckPoint()) ResetSaveLevel();
 			else {
-				Mp3Load("level3.mp3");
-				Mp3Play();
+				//Mp3Load("level3.mp3");
+				//Mp3Play();
 				ResetLevel();
 
 			}
@@ -260,7 +261,7 @@ bool cGame::ManageLogic()
 			Scene.end = false;
 			ResetLevel();
 		}
-	break;
+		break;
 	}
 
 	return true;
@@ -308,7 +309,8 @@ void cGame::ProcessOrder()
 	}
 	if (Keyboard->KeyDown(DIK_C)){
 		double tcancion;
-		tcancion=GetPosition();
+		tcancion = 0;
+		//tcancion=GetPosition();
 		Scene.SaveCheckPoint(&Player,tcancion);	
 	}
 }
@@ -335,9 +337,9 @@ void cGame::ResetLevel()
 }
 void cGame::ResetSaveLevel()
 {
-	Mp3Load("level3.mp3");
-	SetPosition(Scene.ck.tiempocancion);
-	Mp3Play();
+	//Mp3Load("level3.mp3");
+	//SetPosition(Scene.ck.tiempocancion);
+	//Mp3Play();
 	Player.ResetDieAnimation();
 	Scene.RestoreCheckPoint(&Player);
 

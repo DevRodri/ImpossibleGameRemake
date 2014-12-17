@@ -503,7 +503,7 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		//pintar animacion de muerte
 		PintaMuerte(Player);
 		PintaCheckPoint(Scene,Player);
-	
+		break;
 	case STATE_END:
 		
 		PintaFondo(Scene);
@@ -512,7 +512,7 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		PintaScore(Scene, Interface);
 		PintaCheckPoint(Scene, Player);
 		PintaFinal(Scene);
-		
+		break;
 	}
 
 	EndDrawing();
