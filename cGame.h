@@ -13,6 +13,7 @@
 #define STATE_GAME	1
 #define STATE_PAUSE	2
 #define STATE_DEATH 3
+#define STATE_END 4
 
 class cGame
 {

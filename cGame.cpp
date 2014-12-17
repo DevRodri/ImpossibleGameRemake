@@ -87,7 +87,7 @@ bool cGame::Loop()
 
 	do {
 		actCounts = GetTickCount();
-	} while (actCounts - lastCounts < 100 / 7);
+	} while (actCounts - lastCounts < 100 / 10);
 
 	return true;
 }
@@ -144,6 +144,12 @@ bool cGame::ManagePhysics()
 			if (colision == SUELO){ 
 				res = true;
 			} // es el suelo y no cuenta.
+			
+			if (colision == FINAL){
+				state = STATE_END;
+			} // final
+
+		
 			res = true;
 		}
 
@@ -179,7 +185,6 @@ bool cGame::ManageLogic()
 				Mp3Stop();
 				Mp3Load("level3.mp3");
 				Mp3Play();
-				//Scene.SetVelocity(7.5f);
 			}
 			//Exit button
 			else if (Mouse->In(465, 448, 669, 525))
@@ -247,6 +252,15 @@ bool cGame::ManageLogic()
 			}
 		}
 		break;
+	case STATE_END:
+		Scene.PlayEnd();
+		
+		if (Scene.FinishEndAnimation()){
+			state = STATE_MAIN;
+			Scene.end = false;
+			ResetLevel();
+		}
+	break;
 	}
 
 	return true;

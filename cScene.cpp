@@ -10,6 +10,8 @@ cScene::cScene()
 	gx = 0;
 	gy = (29 - HEIGHT_MAX_TILES + 5) * 32;
 	oy = 0;
+	end = false;
+	delay = 0;
 }
 cScene::~cScene(){}
 
@@ -104,6 +106,7 @@ int cScene::Changebackground(cPlayer *Player)
 	//360 fondo amarillo
 	//660 fondo negro
 	//684 fondo azul
+	// fondo de final de fase
 	fondo = 0;
 	if (x >= 360){ fondo = 1; }
 	if (x >= 388){ fondo = 2; }
@@ -148,4 +151,21 @@ void cScene::RestoreCheckPoint(cPlayer *Player)
 	Player->SetVely(vely);
 
 }
+void cScene::PlayEnd()
+{
+	//delay++;
+	//if (delay >= 0)
+	//{
+		alpha = alpha + 3;
+		if (alpha > 255) {
+			alpha = 0;
+			end = true;
+		}
+		//delay = 0;
+	//}
+}
 
+bool cScene::FinishEndAnimation()
+{
+	return end;
+}

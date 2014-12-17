@@ -55,10 +55,14 @@ public:
 	void GetFondo(int *f);
 	void SaveCheckPoint(cPlayer *Player,double tcancion);
 	void RestoreCheckPoint(cPlayer *Player);
+	void PlayEnd();
+	bool FinishEndAnimation();
 
 	void GetMapPosition(int *val, int x, int y); //Obtiene en "val" la posicion (x,y) del mapa
 	int map[SCENE_AREA_X][SCENE_AREA_Y];
 	cCheckPoint ck;
+	bool end;
+	int alpha;
 
 private:
 
@@ -67,7 +71,7 @@ private:
 	int lastPlayerLocalY;
 	float velocity; //velocidad de desplazamiento del mapa
 	int fondo; // 0 fondo normal azul, 1 fundido negro, 2 fondo rojo
-	
+	int delay;
 
 };
 

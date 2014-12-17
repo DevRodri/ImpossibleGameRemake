@@ -256,6 +256,8 @@ void cGraphicsLayer::LoadData()
 	//Main menu
 	texMain = LoadTexture("main.png", NULL);
 	//GUI game
+	texEnd = LoadTexture("end.png", NULL);
+	//GUI game
 	texGame3 = LoadTexture("game3.png", NULL);
 	//GUI game
 	texGame2 = LoadTexture("game2.png", NULL);
@@ -319,6 +321,11 @@ void cGraphicsLayer::UnLoadData()
 	{
 		texNumbers->Release();
 		texNumbers = NULL;
+	}
+	if (texEnd)
+	{
+		texEnd->Release();
+		texEnd = NULL;
 	}
 }
 
@@ -473,26 +480,9 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		break;
 
 	case STATE_GAME:
-		//Graphic User Interface
-		//pintar fondo de pantalla
-
-		//para pintar el fondo con QUADS
 		PintaFondo(Scene);
-		//para pintar el fondo con SPRITES
-		//g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
-		//g_pSprite->Draw(texGame, NULL, NULL, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
-		//g_pSprite->End();
-
-		////////////////////////////////////
-
-		//pintar escena
-		//BeginBatchDrawing(texTiles);
-		PintaEscena(Scene);
-		//EndBatchDrawing();
-
-		///aqui hay que cargar los elementos y pintarlos donde toca.		
+		PintaEscena(Scene);	
 		PintaPlayer(Scene, Player);
-		//Score
 		PintaScore(Scene, Interface);
 		PintaCheckPoint(Scene,Player);
 		break;
@@ -500,12 +490,12 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 	case STATE_DEATH:
 
 		//para pintar el fondo con QUADS
-		BeginBatchDrawing(texGame, 0.0f);
+		/*BeginBatchDrawing(texGame, 0.0f);
 		SetRect(&rc_o, 0, 0, 800, 600);
 		SetRect(&rc_d, 0, 0, 800, 600);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
-		EndBatchDrawing();
-
+		EndBatchDrawing();*/
+		PintaFondo(Scene);
 		//pintar escena
 		PintaEscena(Scene);
 		//
@@ -513,10 +503,17 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		//pintar animacion de muerte
 		PintaMuerte(Player);
 		PintaCheckPoint(Scene,Player);
+	
+	case STATE_END:
+		
+		PintaFondo(Scene);
+		PintaEscena(Scene);
+		PintaPlayer(Scene, Player);
+		PintaScore(Scene, Interface);
+		PintaCheckPoint(Scene, Player);
+		PintaFinal(Scene);
 		
 	}
-
-	
 
 	EndDrawing();
 	Present();
@@ -747,6 +744,7 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 		alpha2 = 0;
 		alpha1 = 0;
 	}
+	
 }
 bool cGraphicsLayer::PintaScore(cScene *Scene, cInterface *Interface)
 {
@@ -818,4 +816,19 @@ bool cGraphicsLayer::PintaCheckPoint(cScene *cScene,cPlayer *Player)
 	}
 	
 	return true;
+}
+bool cGraphicsLayer::PintaFinal(cScene *Scene)
+{
+		RECT rc_o;
+		RECT rc_d;
+
+		AplicaAlpha(Scene->alpha);
+
+		BeginBatchDrawing(texEnd, 0.0f);
+		SetRect(&rc_o, 0, 0, 800, 600);
+		SetRect(&rc_d, 0, 0, 800, 600);
+		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
+		EndBatchDrawing();
+		//AplicaAlpha(255);
+		return true;
 }
