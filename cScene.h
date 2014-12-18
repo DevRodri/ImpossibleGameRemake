@@ -19,7 +19,7 @@
 
 //Tamaño del mapa en tiles
 #define SCENE_AREA_X	32
-#define SCENE_AREA_Y	1216
+#define SCENE_AREA_Y	1280
 
 //Habrá que retocarla para el tema físicas, acorde con el mapa.
 #define SCENE_GROUND	31
