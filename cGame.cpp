@@ -83,7 +83,7 @@ bool cGame::Loop()
 
 	do {
 		actCounts = GetTickCount();
-	} while (actCounts - lastCounts < 100 / 10);
+	} while (actCounts - lastCounts < 100 / 7);
 
 	return true;
 }
