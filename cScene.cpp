@@ -101,7 +101,7 @@ int cScene::Changebackground(cPlayer *Player)
 	if (x >= 288){ fondo = 1; }
 	if (x >= 320){ fondo = 2; }
 	if (x >= 636){ fondo = 1; }
-	if (x >= 680){ fondo = 0; }
+	if (x >= 676){ fondo = 0; }
 
 	return fondo;
 }
