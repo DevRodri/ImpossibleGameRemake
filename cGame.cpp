@@ -181,7 +181,7 @@ bool cGame::ManageLogic()
 				//Mp3Load("button1.mp3");
 				//Mp3Play();
 
-				Sleep(250);
+				//Sleep(250);
 				state = STATE_GAME;
 				//Mp3Stop();
 				//Mp3Load("level3.mp3");
@@ -193,7 +193,7 @@ bool cGame::ManageLogic()
 				//Mp3Stop();
 				//Mp3Load("button1.mp3");
 				//Mp3Play();
-				Sleep(300);
+				//Sleep(300);
 				return false;
 			}
 		}
@@ -211,25 +211,29 @@ bool cGame::ManageLogic()
 		//AQUI MENEO LA CAMARA EN FUNCION DE LA POSICION DEL PERSONAJE
 		//if (Physics.Is_Grounded(&Player, &Scene))
 		//{
-		int lx, ly,
-			lply, offsetYCam;
+		int d0,lx, ly,
+			lply, offsetYCam,gx,gy;
 
 			Player.GetLocalPosition(&lx, &ly);
+			Player.GetGlobalPosition(&gx, &gy);
 			Scene.GetLastPlayerLY(&lply);
 			Scene.GetOffsetYCamera(&offsetYCam);
 
 			if (ly < CAMERA_MAX_Y) // hay que aumentar offset de camara
 			{
 				//Scene.SetLastPlayerLY(ly);
-				Scene.SetOffsetYCamera(offsetYCam + 16);
-				Player.SetLocalPosition(lx, ly + 16);
+				Scene.SetOffsetYCamera(offsetYCam + 1);
+				//Player.SetLocalPosition(lx, ly + 16);
 			}
 			else if (ly > CAMERA_MIN_Y)
 			{
 				//Scene.SetLastPlayerLY(ly);
-				Scene.SetOffsetYCamera(offsetYCam - 16);
-				Player.SetLocalPosition(lx, ly - 16);
+				Scene.SetOffsetYCamera(offsetYCam - 2);
+				//Player.SetLocalPosition(lx, ly - 16);
 			}
+			Scene.GetOffsetYCamera(&offsetYCam);
+			d0 = (SCENE_AREA_X * 32) - SCREEN_RES_Y - offsetYCam + 56;
+			Player.SetLocalPosition(lx, gy-d0);
 		//}
 		Scene.Changebackground(&Player);
 		ProcessOrder();

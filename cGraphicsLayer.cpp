@@ -75,18 +75,18 @@ bool cGraphicsLayer::Init(HWND hWnd, bool exclusive)
 	}
 
 	//Check if hardware vertex processing is available
-	if (d3dCaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)
-	{
+	//if (d3dCaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)
+//	{
 		//Create device with hardware vertex processing
-		hr = g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
-			D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, &g_pD3DDevice);
-	}
-	else
-	{
+	//	hr = g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
+	//		D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, &g_pD3DDevice);
+	//}
+	//else
+	//{
 		//Create device with software vertex processing
 		hr = g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &g_pD3DDevice);
-	}
+	//}
 
 	if (FAILED(hr))
 	{
@@ -623,11 +623,12 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 
 bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 {
-	int px, py, tsize;
+	int gx,gy,px, py, tsize;
 
 	RECT rc_o;
 	RECT rc_d;
 
+	Player->GetGlobalPosition(&gx, &gy);
 	Player->GetLocalPosition(&px, &py);
 	Player->GetTileSize(&tsize);
 	BeginBatchDrawing(texCharacters, 0.0f);
@@ -637,7 +638,7 @@ bool cGraphicsLayer::PintaPlayer(cScene *Scene, cPlayer *Player)
 	//Scene->GetOffsetYCamera(&oy);
 	//py += oy;
 
-	int temp = py % tsize;
+	int temp = gy % tsize;
 	float vuelta, velocidadvuelta;
 	Player->GetVuelta(&vuelta);
 	Player->GetVelocidadVuelta(&velocidadvuelta);

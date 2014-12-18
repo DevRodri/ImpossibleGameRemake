@@ -63,7 +63,7 @@ bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 	// pero si esta suma situa a la pieza encima de una base hay que ponerle la altura de la base
 	//es decir, si la velocidad es de bajada (positiva) y colisiona con un objeto lo ponemos a la altura del objeto.
 	Player->SetGlobalPosition(posfx, posfy);
-	Player->SetLocalPosition(localx, localy);
+	//Player->SetLocalPosition(localx, localy);
 
 	b = Is_Incollision(Player, Scene, &type, ESFERICO, &down, &right);
 
@@ -102,7 +102,7 @@ bool cFisicas::ApplyGravity(cPlayer *Player, cScene *Scene, float dt)
 	}
 
 	Player->SetGlobalPosition(posfx, posfy);
-	Player->SetLocalPosition(localx, localy);
+	//Player->SetLocalPosition(localx, localy);
 
 	return true;
 }
