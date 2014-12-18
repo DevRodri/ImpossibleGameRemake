@@ -7,6 +7,7 @@
 #include "cScene.h"
 #include "cPlayer.h"
 #include "cFisicas.h"
+#include "cMP3.h"
 //#include "cPhysics.h"
 
 #define STATE_MAIN	0
@@ -40,6 +41,7 @@ public:
 	cPlayer Player;
 	cFisicas Physics;
 	cInterface Interface;
+	cMP3 Mp3;
 
 	int psx, psy, ssx, ssy, coff;
 	float fsalt;
