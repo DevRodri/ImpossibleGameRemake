@@ -23,7 +23,10 @@ public:
 	IBasicAudio*   g_pVolumeControl;
 	int			   g_bReady;
 
-		void Mp3Init();
+
+	void Mp3Cleanup();
+
+	void Mp3Init();
 	void Mp3InitGraph();
 	void Mp3InitIMedia();
 	void Mp3InitBasic();
@@ -44,10 +47,5 @@ public:
 	void SetPosition(double posicion);
 	
 	void PrepareTrack(char filename[]);
-
-private:
-	void Mp3Cleanup();
-
-
 };
 #endif

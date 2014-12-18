@@ -316,6 +316,7 @@ void cGame::ResetLevel()
 }
 void cGame::ResetSaveLevel()
 {
+	Mp3.Mp3Cleanup();
 	Mp3.Mp3Load("level3.mp");
 	Mp3.SetPosition(Scene.ck.tiempocancion);
 	Mp3.Mp3Play();
