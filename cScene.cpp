@@ -98,8 +98,8 @@ int cScene::Changebackground(cPlayer *Player)
 	//684 fondo azul
 	// fondo de final de fase
 	fondo = 0;
-	if (x >= 360){ fondo = 1; }
-	if (x >= 380){ fondo = 2; }
+	if (x >= 288){ fondo = 1; }
+	if (x >= 320){ fondo = 2; }
 	if (x >= 734){ fondo = 1; }
 	if (x >= 750){ fondo = 0; }
 
