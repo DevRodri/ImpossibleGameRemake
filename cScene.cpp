@@ -108,8 +108,8 @@ int cScene::Changebackground(cPlayer *Player)
 	//684 fondo azul
 	// fondo de final de fase
 	fondo = 0;
-	if (x >= 360){ fondo = 1; }
-	if (x >= 398){ fondo = 2; }
+	if (x >= 285){ fondo = 1; }
+	if (x >= 320){ fondo = 2; }
 	if (x >= 734){ fondo = 1; }
 	if (x >= 750){ fondo = 0; }
 
@@ -156,23 +156,10 @@ void cScene::PlayEnd()
 	//delay++;
 	//if (delay >= 0)
 	//{
-		alpha = alpha + 5;
-		
-		if (alpha > 100) alpha = alpha ++;
-		if (alpha <= 100) alpha = alpha + 3;
-		if (alpha <= 50) alpha = alpha +5;
-
-
+		alpha = alpha + 3;
 		if (alpha > 255) {
-			
-			alpha = 255;
-			delay++;
-			if (delay >= 200){
-				alpha = 0;
-				end = true;
-				delay = 0;
-			}
-
+			alpha = 0;
+			end = true;
 		}
 		//delay = 0;
 	//}
