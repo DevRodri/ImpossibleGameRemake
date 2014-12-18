@@ -136,7 +136,7 @@ bool cGame::ManagePhysics()
 			//incrementar el contador de intentos
 			//reiniciar el nivel
 			
-			/*if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ 
+			if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ 
 				
 				//Mp3.PrepareTrack("death.mp3",0);
 				Mp3Nivel.Mp3Stop();
@@ -144,7 +144,7 @@ bool cGame::ManagePhysics()
 				Mp3Muerte.Mp3Play();
 				state = STATE_DEATH; 
 			
-			}*/
+			}
 			if (colision == SUELO){ 
 				res = true;
 			} // es el suelo y no cuenta.
