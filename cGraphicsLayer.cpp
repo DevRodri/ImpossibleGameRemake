@@ -790,6 +790,7 @@ bool cGraphicsLayer::PintaScore(cScene *Scene, cInterface *Interface)
 }
 bool cGraphicsLayer::PintaCheckPoint(cScene *cScene,cPlayer *Player)
 {
+	if(cScene->ck.HayCheckPoint()){
 	int px, py, tsize,cpgx,cpgy,cplx,cply;
 
 	RECT rc_o;
@@ -813,6 +814,7 @@ bool cGraphicsLayer::PintaCheckPoint(cScene *cScene,cPlayer *Player)
 	}
 	
 	return true;
+	}
 }
 bool cGraphicsLayer::PintaFinal(cScene *Scene)
 {
