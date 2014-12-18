@@ -47,6 +47,16 @@ void cScene::SetGlobalPosition(int gpx, int gpy)
 	gy = gpy;
 }
 
+void cScene::GetLastPlayerLY(int *lply)
+{
+	*lply = lastPlayerLocalY;
+}
+
+void cScene::SetLastPlayerLY(int value)
+{
+	lastPlayerLocalY = value;
+}
+
 void cScene::CalculateCellonX(int *cell, int gpx)
 {
 	*cell = gpx / 32;
