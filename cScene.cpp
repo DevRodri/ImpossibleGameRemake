@@ -100,13 +100,8 @@ int cScene::Changebackground(cPlayer *Player)
 	fondo = 0;
 	if (x >= 288){ fondo = 1; }
 	if (x >= 320){ fondo = 2; }
-<<<<<<< HEAD
 	if (x >= 630){ fondo = 1; }
 	if (x >= 662){ fondo = 0; }
-=======
-	if (x >= 734){ fondo = 1; }
-	if (x >= 750){ fondo = 0; }
->>>>>>> parent of f472e78... segundo pintado.. da igual pk la musica va a su bola dependiendo del pc XD
 
 	return fondo;
 }
