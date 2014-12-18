@@ -45,7 +45,10 @@ bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 	fsalt = -10.1f;
 	//Inicializa posicion del jugador
 	Player.SetTileSize(32);
+	//Player.SetLocalPosition(5,32);
+	//Player.SetGlobalPosition(5 * 32, SCENE_GROUND * 32);
 	Player.SetLocalPosition(5 * 32, (29 - HEIGHT_MAX_TILES + 4) * 32);
+	Scene.SetLastPlayerLY( (29 - HEIGHT_MAX_TILES + 4) * 32 );
 	Player.SetGlobalPosition(5 * 32, 29 * 32);
 	psx = 5 * 32;
 	psy = 29 * 32;
@@ -129,12 +132,12 @@ bool cGame::ManagePhysics()
 			//incrementar el contador de intentos
 			//reiniciar el nivel
 			
-			if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ 
+			//if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ 
 				
-				Mp3.PrepareTrack("death.mp3");
-				state = STATE_DEATH; 
-			
-			}
+			//	Mp3.PrepareTrack("death.mp3");
+			//	state = STATE_DEATH; 
+		//	
+			//}
 			if (colision == SUELO){ 
 				res = true;
 			} // es el suelo y no cuenta.
@@ -196,36 +199,39 @@ bool cGame::ManageLogic()
 		}
 
 		//AQUI MENEO LA CAMARA EN FUNCION DE LA POSICION DEL PERSONAJE
-
+		//if (Physics.Is_Grounded(&Player, &Scene))
+		//{
 		int d0,lx, ly,
-		lply, offsetYCam,gx,gy;
+			lply, offsetYCam,gx,gy;
 
-		Player.GetLocalPosition(&lx, &ly);
-		Player.GetGlobalPosition(&gx, &gy);
-		Scene.GetOffsetYCamera(&offsetYCam);
+			Player.GetLocalPosition(&lx, &ly);
+			Player.GetGlobalPosition(&gx, &gy);
+			Scene.GetLastPlayerLY(&lply);
+			Scene.GetOffsetYCamera(&offsetYCam);
 
-		if (ly < CAMERA_MAX_Y) // hay que aumentar offset de camara
-		{
-			Scene.SetOffsetYCamera(offsetYCam + 1);
-		}
-		else if (ly > CAMERA_MIN_Y)
-		{
-			d0 = (SCENE_AREA_X * 32) - SCREEN_RES_Y - offsetYCam + 56;
-			if ((gy - d0) > 512) 
-			{ //esta casi fuera de la pantalla dios mio!!!!
-				Scene.SetOffsetYCamera(offsetYCam - (gy-d0-512)); //lo resituo dentro de pantalla
+			if (ly < CAMERA_MAX_Y) // hay que aumentar offset de camara
+			{
+				//Scene.SetLastPlayerLY(ly);
+				Scene.SetOffsetYCamera(offsetYCam + 1);
+				//Player.SetLocalPosition(lx, ly + 16);
 			}
-			else Scene.SetOffsetYCamera(offsetYCam - 4);
-		}
-		Scene.GetOffsetYCamera(&offsetYCam);
-		d0 = (SCENE_AREA_X * 32) - SCREEN_RES_Y - offsetYCam + 56;
-		Player.SetLocalPosition(lx, gy-d0);
-		
+			else if (ly > CAMERA_MIN_Y)
+			{
+				//Scene.SetLastPlayerLY(ly);
+				Scene.SetOffsetYCamera(offsetYCam - 2);
+				//Player.SetLocalPosition(lx, ly - 16);
+			}
+			Scene.GetOffsetYCamera(&offsetYCam);
+			d0 = (SCENE_AREA_X * 32) - SCREEN_RES_Y - offsetYCam + 56;
+			Player.SetLocalPosition(lx, gy-d0);
+		//}
 		Scene.Changebackground(&Player);
 		ProcessOrder();
 		break;
 
 	case STATE_DEATH:
+
+		//Scene.SetVelocity(0.0f);
 
 		Player.PlayDieAnimation();
 		if (Player.IsDeath()){
@@ -269,6 +275,15 @@ void cGame::ProcessOrder()
 		if (Physics.Is_Grounded(&Player, &Scene))
 		{
 			Player.SetVely(fsalt);
+			//segun el juego original el salto de largo es de 4 espacios
+			//|X|_|_|_|_|X|
+			// de alto salta exactamente 1.5 de su altura
+			//|_|_|_|x|_|_|_|
+			//| | |X|X|X| | |
+			//|_|X|X|_|X|X|_|
+			//|X|X| | | |X|X|
+			//|X|_|_|_|_|_|X|
+			//
 
 		}
 		

@@ -75,18 +75,18 @@ bool cGraphicsLayer::Init(HWND hWnd, bool exclusive)
 	}
 
 	//Check if hardware vertex processing is available
-	//if (d3dCaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)
-//	{
+	if (d3dCaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)
+	{
 		//Create device with hardware vertex processing
-	//	hr = g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
-	//		D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, &g_pD3DDevice);
-	//}
-	//else
-	//{
+		hr = g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
+			D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, &g_pD3DDevice);
+	}
+	else
+	{
 		//Create device with software vertex processing
 		hr = g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &g_pD3DDevice);
-	//}
+	}
 
 	if (FAILED(hr))
 	{
@@ -469,8 +469,8 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 		//pintar pantalla principal
 		BeginBatchDrawing(texMain,0.0f);
 		//rectangulo de toda la pantalla
-		SetRect(&rc_o, 0, 0, 800, 600);
-		SetRect(&rc_d, 0, 0, 800, 600);
+		SetRect(&rc_o, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
+		SetRect(&rc_d, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 		//pintamos.
 		EndBatchDrawing();
@@ -490,15 +490,10 @@ bool cGraphicsLayer::Render(cMouse *Mouse, cScene *Scene, int state, cPlayer *Pl
 	case STATE_DEATH:
 
 		//para pintar el fondo con QUADS
-		/*BeginBatchDrawing(texGame, 0.0f);
-		SetRect(&rc_o, 0, 0, 800, 600);
-		SetRect(&rc_d, 0, 0, 800, 600);
-		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
-		EndBatchDrawing();*/
+	
 		PintaFondo(Scene);
 		//pintar escena
 		PintaEscena(Scene);
-		//
 		PintaScore(Scene, Interface);
 		//pintar animacion de muerte
 		PintaMuerte(Player);
@@ -600,6 +595,7 @@ bool cGraphicsLayer::PintaEscena(cScene *Scene)
 			Scene->GetMapPosition(&n, y, x);
 
   			if (y >= 0) {
+				//if (n == 2){ AplicaAlpha(150); }
 				int temp_i;
 				temp_i = fx - x;
 				if ((temp_i <= 2) || (temp_i >= 26)) { AplicaAlpha(0); }
@@ -684,8 +680,8 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 	RECT rc_d;
 
 	BeginBatchDrawing(texGame3, 0.0f);
-	SetRect(&rc_o, 0, 0, 800, 600);
-	SetRect(&rc_d, 0, 0, 800, 600);
+	SetRect(&rc_o, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
+	SetRect(&rc_d, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
 	AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 	EndBatchDrawing();
 
@@ -698,8 +694,8 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 		AplicaAlpha(alpha1);
 
 		BeginBatchDrawing(texGame, 0.0f);
-		SetRect(&rc_o, 0, 0, 800, 600);
-		SetRect(&rc_d, 0, 0, 800, 600);
+		SetRect(&rc_o, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
+		SetRect(&rc_d, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 		EndBatchDrawing();
 		AplicaAlpha(255);
@@ -712,15 +708,15 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 		if (alpha2 > 255) alpha2 = 255;
 
 		BeginBatchDrawing(texGame, 0.0f);
-		SetRect(&rc_o, 0, 0, 800, 600);
-		SetRect(&rc_d, 0, 0, 800, 600);
+		SetRect(&rc_o, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
+		SetRect(&rc_d, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 		EndBatchDrawing();
 
 		AplicaAlpha(alpha2);
 		BeginBatchDrawing(texGame3, 0.0f);
-		SetRect(&rc_o, 0, 0, 800, 600);
-		SetRect(&rc_d, 0, 0, 800, 600);
+		SetRect(&rc_o, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
+		SetRect(&rc_d, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 		EndBatchDrawing();
 
@@ -736,8 +732,8 @@ void cGraphicsLayer::PintaFondo(cScene *Scene)
 		AplicaAlpha(alpha3);
 
 		BeginBatchDrawing(texGame2, 0.0f);
-		SetRect(&rc_o, 0, 0, 800, 600);
-		SetRect(&rc_d, 0, 0, 800, 600);
+		SetRect(&rc_o, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
+		SetRect(&rc_d, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 		EndBatchDrawing();
 
@@ -826,8 +822,8 @@ bool cGraphicsLayer::PintaFinal(cScene *Scene)
 		AplicaAlpha(Scene->alpha);
 
 		BeginBatchDrawing(texEnd, 0.0f);
-		SetRect(&rc_o, 0, 0, 800, 600);
-		SetRect(&rc_d, 0, 0, 800, 600);
+		SetRect(&rc_o, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
+		SetRect(&rc_d, 0, 0, SCREEN_RES_X, SCREEN_RES_Y);
 		AddQuad(rc_o, rc_d, 0xFFFFFFFF);
 		EndBatchDrawing();
 		//AplicaAlpha(255);
