@@ -11,7 +11,7 @@ cGame::~cGame(){}
 bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 {
 	
-	Mp3.PrepareTrack("main.mp3");
+	Mp3.PrepareTrack("main.mp3",0);
 	bool res;
 	cLog *Log = cLog::Instance();
 
@@ -131,7 +131,7 @@ bool cGame::ManagePhysics()
 			
 			if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ 
 				
-				Mp3.PrepareTrack("death.mp3");
+				Mp3.PrepareTrack("death.mp3",0);
 				state = STATE_DEATH; 
 			
 			}
@@ -171,15 +171,15 @@ bool cGame::ManageLogic()
 			if (Mouse->In(417, 293, 700, 393))
 			{
 
-				Mp3.PrepareTrack("button1.mp3");
+				Mp3.PrepareTrack("button1.mp3",0);
 				state = STATE_GAME;
 				while( Mp3.GetPosition() != Mp3.GetDuration()){}
-				Mp3.PrepareTrack("level3.mp3");
+				Mp3.PrepareTrack("level3.mp3",0);
 			}
 			//Exit button
 			else if (Mouse->In(465, 448, 669, 525))
 			{
-				Mp3.PrepareTrack("button1.mp3");
+				Mp3.PrepareTrack("button1.mp3",0);
 				while( Mp3.GetPosition() != Mp3.GetDuration()){}
 				return false;
 			}
@@ -189,7 +189,7 @@ bool cGame::ManageLogic()
 	case STATE_GAME:
 
 		if (Keyboard->KeyDown(DIK_ESCAPE)){
-			Mp3.PrepareTrack("main.mp3");
+			Mp3.PrepareTrack("main.mp3",0);
 			Interface.InitScore();
 			ResetLevel();
 			state = STATE_MAIN;
@@ -235,9 +235,8 @@ bool cGame::ManageLogic()
 			//si hay punto de guardado lo restauramos , sino reseteamos el level;
 			if (Scene.ck.HayCheckPoint()) ResetSaveLevel();
 			else {
-				Mp3.PrepareTrack("level3.mp3");
+				Mp3.PrepareTrack("level3.mp3",0);
 				ResetLevel();
-
 			}
 		}
 		break;
@@ -316,10 +315,11 @@ void cGame::ResetLevel()
 }
 void cGame::ResetSaveLevel()
 {
-	Mp3.Mp3Cleanup();
-	Mp3.Mp3Load("level3.mp");
-	Mp3.SetPosition(Scene.ck.tiempocancion);
-	Mp3.Mp3Play();
+	Mp3.PrepareTrack("level3.mp3",Scene.ck.tiempocancion);
+	//Mp3.Mp3Init();
+	//Mp3.Mp3Load("level3.mp");
+	//Mp3.SetPosition(Scene.ck.tiempocancion);
+	//Mp3.Mp3Play();
 	Player.ResetDieAnimation();
 	Scene.RestoreCheckPoint(&Player);
 

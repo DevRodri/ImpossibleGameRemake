@@ -185,11 +185,12 @@ double cMP3::GetPosition()
   }
 
 
-void cMP3::PrepareTrack(char filename[])
+void cMP3::PrepareTrack(char filename[], double inicio)
 {
 	Mp3Cleanup();
 	Mp3Init();
 	Mp3Load(filename);
+	SetPosition(inicio);
 	Mp3Play();
 
 }

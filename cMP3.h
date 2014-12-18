@@ -46,6 +46,6 @@ public:
 	double GetPosition();
 	void SetPosition(double posicion);
 	
-	void PrepareTrack(char filename[]);
+	void PrepareTrack(char filename[], double inicio);
 };
 #endif
