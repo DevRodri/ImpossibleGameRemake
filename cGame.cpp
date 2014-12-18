@@ -350,4 +350,8 @@ void cGame::Finalize()
 	Graphics.Finalize();
 	Input.UnacquireAll();
 	Input.Finalize();
+	Mp3Inicio.Mp3Cleanup();
+	Mp3Muerte.Mp3Cleanup();
+	Mp3Nivel.Mp3Cleanup();
+	Mp3.Mp3Cleanup();
 }
