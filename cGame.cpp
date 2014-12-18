@@ -150,6 +150,7 @@ bool cGame::ManagePhysics()
 			} // es el suelo y no cuenta.
 			
 			if (colision == FINAL){
+				Mp3Nivel.Mp3Stop();
 				state = STATE_END;
 			} // final
 
