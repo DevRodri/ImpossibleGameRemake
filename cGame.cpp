@@ -11,7 +11,14 @@ cGame::~cGame(){}
 bool cGame::Init(HWND hWnd, HINSTANCE hInst, bool exclusive)
 {
 	
-	Mp3.PrepareTrack("main.mp3",0);
+	//Mp3.PrepareTrack("main.mp3",0);
+	//Mp3Inicio.Mp3Init();
+	Mp3Muerte.Mp3Init();
+	Mp3Nivel.Mp3Init();
+	Mp3Inicio.PrepareTrack("main.mp3", 0);
+	Mp3Muerte.Mp3Load("death.mp3");
+	Mp3Nivel.Mp3Load("level3.mp3");
+	
 	bool res;
 	cLog *Log = cLog::Instance();
 
@@ -131,7 +138,10 @@ bool cGame::ManagePhysics()
 			
 			if (colision == PINCHO || colision == CUBO || colision == AGUJERO){ 
 				
-				Mp3.PrepareTrack("death.mp3",0);
+				//Mp3.PrepareTrack("death.mp3",0);
+				Mp3Nivel.Mp3Stop();
+				Mp3Muerte.SetPosition(0);
+				Mp3Muerte.Mp3Play();
 				state = STATE_DEATH; 
 			
 			}
@@ -174,7 +184,10 @@ bool cGame::ManageLogic()
 				Mp3.PrepareTrack("button1.mp3",0);
 				state = STATE_GAME;
 				while( Mp3.GetPosition() != Mp3.GetDuration()){}
-				Mp3.PrepareTrack("level3.mp3",0);
+				//Mp3.PrepareTrack("level3.mp3",0);
+				Mp3Inicio.Mp3Stop();
+				Mp3Nivel.SetPosition(0);
+				Mp3Nivel.Mp3Play();
 			}
 			//Exit button
 			else if (Mouse->In(465, 448, 669, 525))
@@ -189,7 +202,8 @@ bool cGame::ManageLogic()
 	case STATE_GAME:
 
 		if (Keyboard->KeyDown(DIK_ESCAPE)){
-			Mp3.PrepareTrack("main.mp3",0);
+			Mp3Nivel.Mp3Stop();
+			Mp3Inicio.PrepareTrack("main.mp3", 0);
 			Interface.InitScore();
 			ResetLevel();
 			state = STATE_MAIN;
@@ -230,12 +244,14 @@ bool cGame::ManageLogic()
 		Player.PlayDieAnimation();
 		if (Player.IsDeath()){
 			Interface.SumScore();
-			while( Mp3.GetPosition() != Mp3.GetDuration()){}
+			//while( Mp3.GetPosition() != Mp3.GetDuration()){}
 			state = STATE_GAME;
 			//si hay punto de guardado lo restauramos , sino reseteamos el level;
 			if (Scene.ck.HayCheckPoint()) ResetSaveLevel();
 			else {
-				Mp3.PrepareTrack("level3.mp3",0);
+				Mp3Nivel.Mp3Stop();
+				Mp3Nivel.SetPosition(0);
+				Mp3Nivel.Mp3Play();
 				ResetLevel();
 			}
 		}
@@ -288,7 +304,7 @@ void cGame::ProcessOrder()
 	if (Keyboard->KeyDown(DIK_C)){
 		double tcancion;
 		tcancion = 0;
-		tcancion=Mp3.GetPosition();
+		tcancion=Mp3Nivel.GetPosition();
 		Scene.SaveCheckPoint(&Player,tcancion);	
 	}
 }
@@ -315,7 +331,10 @@ void cGame::ResetLevel()
 }
 void cGame::ResetSaveLevel()
 {
-	Mp3.PrepareTrack("level3.mp3",Scene.ck.tiempocancion);
+	//Mp3.PrepareTrack("level3.mp3",Scene.ck.tiempocancion);
+	Mp3Nivel.Mp3Stop();
+	Mp3Nivel.SetPosition(Scene.ck.tiempocancion);
+	Mp3Nivel.Mp3Play();
 	//Mp3.Mp3Init();
 	//Mp3.Mp3Load("level3.mp");
 	//Mp3.SetPosition(Scene.ck.tiempocancion);

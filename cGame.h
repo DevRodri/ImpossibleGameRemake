@@ -41,6 +41,9 @@ public:
 	cPlayer Player;
 	cFisicas Physics;
 	cInterface Interface;
+	cMP3 Mp3Inicio;
+	cMP3 Mp3Muerte;
+	cMP3 Mp3Nivel;
 	cMP3 Mp3;
 
 	int psx, psy, ssx, ssy, coff;
